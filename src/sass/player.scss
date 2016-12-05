@@ -133,6 +133,22 @@
   content: "\f026";
 }
 
+.apbp-playpause-play .fa:before {
+  content: "\f04b";
+}
+
+.apbp-playpause-pause .fa:before {
+  content: "\f04c";
+}
+
+.apbp-fullscreen-expandcontract .fa:before {
+  content: "\f065"
+}
+
+.apbp-fullscreen .apbp-fullscreen-expandcontract .fa:before {
+  content: "\f066"
+}
+
 .apbp-poster-image, .apbp-slide-image {
   position: absolute;
   top: 0;

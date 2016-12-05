@@ -97,6 +97,10 @@ apbp.playerIndex = 0;
         audioVolume: 'horizontal',
         muteText: mejs.i18n.t('Mute Toggle'),
         allyVolumeControlText: mejs.i18n.t('Use Up/Down Arrow keys to increase or decrease volume.'),
+        playText: mejs.i18n.t('Play'),
+        pauseText: mejs.i18n.t('Pause'),
+
+
 
 
         // array of keyboard actions such as play pause
@@ -372,9 +376,12 @@ apbp.playerIndex = 0;
             }
             var allButtons = $('<div class="apbp-control-buttons" />');
             t.controls.append(allButtons);
-            allButtons.append('<span class="apbp-button apbp-previous"><button><i class="fa fa-inverse fa-step-backward"></i></button></span>');
-            allButtons.append('<span class="apbp-button apbp-playpause apbp-playpause-play"><button><i class="fa fa-inverse fa-play"></i></button></span>');
-            allButtons.append('<span class="apbp-button apbp-next"><button><i class="fa fa-inverse fa-step-forward"></i></button></span>');
+            //allButtons.append('<span class="apbp-button apbp-previous"><button><i class="fa fa-inverse fa-step-backward"></i></button></span>');
+            this.buildprevtrack(this, allButtons, this.layers, this.media);
+            //allButtons.append('<span class="apbp-button apbp-playpause apbp-playpause-play"><button><i class="fa fa-inverse fa-play"></i></button></span>');
+            this.buildplaypause(this.player, allButtons, this.layers, this.media);
+            //allButtons.append('<span class="apbp-button apbp-next"><button><i class="fa fa-inverse fa-step-forward"></i></button></span>');
+            this.buildnexttrack(this, allButtons, this.layers, this.media);
             allButtons.append('<span class="apbp-controls-timestamp"><span class="apbp-timestamp-current">00:00</span> / <span class="apbp-timestamp-total"></span></span>')
             allButtons.append('<span class="apbp-controls-spacer"></span>');
 
@@ -383,7 +390,8 @@ apbp.playerIndex = 0;
 
             t.buildvolume(t, allButtons, t.layers, t.$media[0]);
 
-            allButtons.append('<span class="apbp-fullscreen apbp-fullscreen-expand"><button><i class="fa fa-inverse fa-expand"></i></button></span>');
+            //allButtons.append('<span class="apbp-fullscreen apbp-fullscreen-expand"><button><i class="fa fa-inverse fa-expand"></i></button></span>');
+            this.buildaudiofullscreen(this, allButtons, this.layers, this.media);
 
             t.genPlaylist(t, allButtons, t.layers, t.$media[0]);
 
@@ -938,6 +946,90 @@ apbp.playerIndex = 0;
 
 
         },
+        buildplaypause: function(player, controls, layers, media) {
+            var
+                t = this,
+                op = t.options,
+                play =
+                    $('<span class="apbp-button apbp-playpause apbp-playpause-play" >' +
+                        '<button type="button" aria-controls="' + t.id + '" title="' + op.playText + '" aria-label="' + op.playText + '">' +
+                        '<i class="fa fa-inverse"></i>' +
+                        '</button>' +
+                        '</span>')
+                        .appendTo(controls)
+                        .click(function(e) {
+                            e.preventDefault();
+
+                            if (media.paused) {
+                                media.play();
+                            } else {
+                                media.pause();
+                            }
+
+                            return false;
+                        }),
+                play_btn = play.find('button');
+
+
+            function togglePlayPause(which) {
+                if ('play' === which) {
+                    play.removeClass('apbp-playpause-play').addClass('apbp-playpause-pause');
+                    play_btn.attr({
+                        'title': op.pauseText,
+                        'aria-label': op.pauseText
+                    });
+                } else {
+                    play.removeClass('apbp-playpause-pause').addClass('apbp-playpause-play');
+                    play_btn.attr({
+                        'title': op.playText,
+                        'aria-label': op.playText
+                    });
+                }
+            };
+            togglePlayPause('pse');
+
+
+            media.addEventListener('play',function() {
+                togglePlayPause('play');
+            }, false);
+            media.addEventListener('playing',function() {
+                togglePlayPause('play');
+            }, false);
+
+
+            media.addEventListener('pause',function() {
+                togglePlayPause('pse');
+            }, false);
+            media.addEventListener('paused',function() {
+                togglePlayPause('pse');
+            }, false);
+        },
+        buildprevtrack: function(player, controls, layers, media) {
+            var t = this;
+            var prevTrack = $('<span class="apbp-button apbp-previous">' + '<button type="button" aria-controls="' + player.id + '" title="' + player.options.prevText + '"><i class="fa fa-inverse fa-step-backward"></i></button>' + "</span>");
+            prevTrack.appendTo(controls).click(function() {
+                $(media).trigger("apbp-playprevtrack");
+                player.playPrevTrack();
+            });
+            t.prevTrack = t.controls.find(".apbp-prevtrack-button");
+        },
+        prevTrackClick: function() {
+            var t = this;
+            t.prevTrack.trigger("click");
+        },
+        buildnexttrack: function(player, controls, layers, media) {
+            var t = this;
+            var nextTrack = $('<div class="apbp-button apbp-next">' + '<button type="button" aria-controls="' + player.id + '" title="' + player.options.nextText + '"><i class="fa fa-inverse fa-step-forward"></i></button>' + "</div>");
+            nextTrack.appendTo(controls).click(function() {
+                $(media).trigger("apbp-playnexttrack");
+                player.playNextTrack();
+            });
+            t.nextTrack = t.controls.find(".apbp-nexttrack-button");
+        },
+        nextTrackClick: function() {
+            var t = this;
+            t.nextTrack.trigger("click");
+        },
         playNextTrack: function() {
             var t = this, nxt;
             var tracks = t.layers.find(".apbp-playlist > ul > li");
@@ -1052,6 +1144,93 @@ apbp.playerIndex = 0;
             }, false);
 
 
+        },
+        buildaudiofullscreen: function(player, controls, layers, media) {
+            var t = this;
+            if(screenfull.enabled);
+            if (mejs.MediaFeatures.hasTrueNativeFullScreen) {
+                var func = function(e) {
+                    if (player.isFullScreen) {
+                        if (mejs.MediaFeatures.isFullScreen()) {
+                            player.isNativeFullScreen = true;
+                            player.setControlsSize();
+                        } else {
+                            player.isNativeFullScreen = false;
+                            player.exitFullScreen();
+                        }
+                    }
+                };
+                player.globalBind(mejs.MediaFeatures.fullScreenEventName, func);
+            }
+            t.fullscreenBtn = $('<div class="apbp-button apbp-fullscreen-expandcontract">' + '<button type="button" aria-controls="' + t.id + '" title="' + t.options.fullscreenText + '" aria-label="' + t.options.fullscreenText + '"><i class="fa fa-inverse"></i></button>' + "</div>");
+            t.fullscreenBtn.appendTo(controls);
+
+            t.fullscreenBtn.on('click', function(e) {
+                if(player.isFullScreen) {
+                    if(screenfull.enabled) {
+                        screenfull.exit();
+                    }
+                    else {
+                        player.removeClass("apbp-fakefullscreen");
+                    }
+                    player.removeClass("apbp-fullscreen");
+                    player.isFullScreen = false;
+                }
+                else {
+                    if(screenfull.enabled) {
+                        screenfull.request(player.container[0]);
+                    }
+                    else {
+                        player.addClass("apbp-fakefullscreen");
+                    }
+                    player.addClass("apbp-fullscreen");
+                    player.isFullScreen = true;
+                }
+            });
+
+
+
+            /*var noIOSFullscreen = !mejs.MediaFeatures.hasTrueNativeFullScreen && mejs.MediaFeatures.hasSemiNativeFullScreen && !t.media.webkitEnterFullscreen;
+            if (t.media.pluginType === "native" && !noIOSFullscreen || !t.options.usePluginFullScreen && !mejs.MediaFeatures.isFirefox) {
+                t.fullscreenBtn.click(function() {
+                    var isFullScreen = mejs.MediaFeatures.hasTrueNativeFullScreen && mejs.MediaFeatures.isFullScreen() || player.isFullScreen;
+                    if (isFullScreen) {
+                        player.exitFullScreen();
+                    } else {
+                        player.enterFullScreen();
+                    }
+                });
+            } else {
+                var fullscreenClass = "apbp-fullscreen";
+                t.fullscreenBtn.click(function() {
+                    var isFullscreen = player.container.hasClass(fullscreenClass);
+                    if (isFullscreen) {
+                        $(document.body).removeClass(fullscreenClass);
+                        player.container.removeClass(fullscreenClass);
+                        player.resetSize();
+                        t.isFullScreen = false;
+                    } else {
+                        t.normalHeight = t.container.height();
+                        t.normalWidth = t.container.width();
+                        $(document.body).addClass(fullscreenClass);
+                        player.container.addClass(fullscreenClass);
+                        /*t.container.css({
+                            width: "100%",
+                            height: "100%"
+                        });
+                        player.layers.children().css("width", "100%").css("height", "100%");
+                        t.containerSizeTimeout = setTimeout(function() {
+                            t.container.css({
+                                width: "100%",
+                                height: "100%"
+                            });
+                            player.layers.children().css("width", "100%").css("height", "100%");
+                            t.setControlsSize();
+                        }, 500);
+                        t.isFullScreen = true;
+                    }
+                });
+            } */
         }
     };
 
