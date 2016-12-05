@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Player demo</title>
+    <script type="text/javascript" src="libs/mediaelement/mediaelement.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="libs/shims/getElementsByClassName-1.0.1.js"></script>
+    <script type="text/javascript" src="libs/shims/other.js"></script>
+    <script type="text/javascript" src="build/APbP.js"></script>
+    <link rel="stylesheet" type="text/css" href="libs/font-awesome-4.7.0/css/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="build/APbP.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+    </style>
+    <!--[if lt IE 9]>
+    <script>
+        window.attachEvent( "onload", function() {
+            var html = document.documentElement, clss = html.className;
+            html.className = clss + " ie-force-pseudo-refresh";
+            setTimeout( function(){ html.className = clss; }, 10 );
+        });
+    </script>
+    <![endif]-->
+</head>
+<body>
+<div class="wrapper" style="max-width: 45em; padding: 1em 0.5em; margin: auto;">
+<h2>Player 1</h2>
+<audio
+id="apbp1"
+data-showplaylist="false"
+controls="controls"
+preload="auto"
+style="max-width: 100%; height: 100%"
+>
+    <source src="https://raw.githubusercontent.com/portablejim/example-media/master/LucaFrancini-Earth.mp3" title="Luca Francini - Earth" data-poster="https://raw.githubusercontent.com/portablejim/example-media/master/LucaFrancini-Earth_cover.jpg" type="audio/mpeg"
+            data-slides-inline='[["00:00:00", "media/photos/landscape-615429_1920.jpg"],["00:00:05", "media/photos/leaf-228052_1920.jpg"],["00:00:10", "media/photos/leaf-299931_1920.jpg"],["00:00:15", "media/photos/mossy-trees-forests-woods.jpg"],["00:00:20", "media/photos/old-growth-coastal-forest.jpg"],["00:00:25", "media/photos/tree-213980_1920.jpg"],["00:00:30", "media/photos/tree-779827_1920.jpg"],["00:00:35", "media/photos/trees-1789120_1920.jpg"]]'/>
+    <source src="https://raw.githubusercontent.com/portablejim/example-media/master/Forward.mp3"
+        title="RSF - Forward"
+        data-poster="https://raw.githubusercontent.com/portablejim/example-media/master/forward_cover.jpg"
+        type="audio/mpeg"
+        data-slides-inline='[["00:00:00", "media/photos/Dark_mossy_forest.jpg"],["00:00:04", "media/photos/Old_growth_forest_scenic.jpg"],["00:00:08", "media/photos/Scenic_view_of_forest_habitat.jpg"],["00:00:15", "media/photos/fog-571786_1920.jpg"],["00:00:20", "media/photos/forest-1828597.jpg"],["00:00:25", "media/photos/glengesh-pass-in-ireland-old-tree.jpg"],["00:00:30", "media/photos/green-872866_1920.jpg"],["00:00:35", "media/photos/hazelnuts-1574367_1920.jpg"],["00:00:40", "media/photos/landscape-1802340.jpg"]]'
+        data-slides-lang="en"/>
+    <source src="https://raw.githubusercontent.com/portablejim/example-media/master/LucaFrancini-EarthRemix.mp3" title="Luca Francini - Earth (Aly Elmasry Remix)" data-poster="https://raw.githubusercontent.com/portablejim/example-media/master/LucaFrancini-EarthRemix_cover.jpg" type="audio/mpeg"/>
+    <source src="https://raw.githubusercontent.com/portablejim/example-media/master/mother.mp3" title="Vaporia - To Mother" data-poster="https://raw.githubusercontent.com/portablejim/example-media/master/to-mother_artwork.jpg" type="audio/mpeg"/>
+</audio>
+    <p id="debug"></p>
+<script type="text/javascript">
+    $('#apbp1').audiopicturebookplayer()
+</script>
+</div>
+</body>
+</html>

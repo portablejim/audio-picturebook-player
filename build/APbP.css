@@ -1,0 +1,155 @@
+.apbp-layers, .apbp-progress, .apbp-control-buttons {
+  background-color: #000;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+.apbp-images.apbp-blackout {
+  background-color: #000;
+}
+
+.apbp-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.apbp-progress {
+  height: 4px;
+  position: relative;
+  top: 0;
+}
+.apbp-progress .apbp-progress-loaded {
+  background-color: #ccc;
+  background-color: #33333320;
+  height: 100%;
+  position: absolute;
+  top: 0;
+}
+.apbp-progress .apbp-progress-current {
+  background-color: red;
+  height: 100%;
+  position: absolute;
+  top: 0;
+}
+
+.apbp-control-buttons {
+  background-color: #222;
+  font-size: 16px;
+  height: 30px;
+  line-height: 30px;
+  display: -ms-flexbox;
+  display: flex;
+  color: white;
+}
+.apbp-control-buttons button {
+  font-size: 16px;
+  border: 0;
+  background: transparent;
+  height: 100%;
+  width: 100%;
+}
+.apbp-control-buttons .apbp-button {
+  min-width: 30px;
+  width: 30px;
+}
+.apbp-control-buttons .apbp-control-left {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.apbp-control-buttons .apbp-control-right {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.apbp-control-buttons .apbp-offscreen {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+}
+.apbp-control-buttons .apbp-horizontal-volume-slider {
+  position: relative;
+  left: 0;
+  width: 75px;
+  height: 10px;
+  max-width: 75px;
+  -ms-flex-item-align: center;
+  align-self: center;
+}
+.apbp-control-buttons .apbp-horizontal-volume-slider .apbp-horizontal-volume-total {
+  width: 100%;
+  height: 100%;
+  background: #333;
+}
+.apbp-control-buttons .apbp-horizontal-volume-slider .apbp-horizontal-volume-current {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  top: -10px;
+  background: #ccc;
+}
+.apbp-control-buttons .apbp-controls-spacer {
+  -ms-flex-positive: 2;
+  flex-grow: 2;
+}
+.apbp-control-buttons a {
+  height: 100%;
+  display: inline-block;
+  min-width: 30px;
+  min-height: 30px;
+  text-align: center;
+}
+.apbp-control-buttons a i {
+  margin: auto;
+}
+.apbp-control-buttons a:hover {
+  background-color: darkgray;
+}
+
+.apbp-controls-timestamp {
+  font-size: 14px;
+}
+
+.apbp-mute .fa:before {
+  content: "\f028";
+}
+
+.apbp-unmute .fa:before {
+  content: "\f026";
+}
+
+.apbp-poster-image, .apbp-slide-image {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.apbp-poster, .apbp-layers .apbp-poster-image, .apbp-layers .apbp-slide-image {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.apbp-slide-image {
+  opacity: 0;
+  transition: opacity 1s ease-out;
+}
+
+.apbp-slide-image:first-child {
+  opacity: 0;
+  transition: opacity 0s ease-out;
+}
+
+/*# sourceMappingURL=APbP.css.map */
