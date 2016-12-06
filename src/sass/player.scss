@@ -37,6 +37,7 @@
 }
 
 .apbp-control-buttons {
+  color: #eeeeee;
   background-color: #222;
   font-size: 16px;
   height: 30px;
@@ -49,13 +50,18 @@
     background: transparent;
     height: 100%;
     width: 100%;
+    color: inherit;
   }
   .apbp-button {
     min-width: 30px;
     width: 30px;
   }
 
-  color: white;
+  .apbp-button.apbp-disabled {
+    color: #6D6D6D;
+  }
+
+
   .apbp-control-left {
     height: 100%;
     margin: 0;

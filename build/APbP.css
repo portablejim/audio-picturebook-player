@@ -38,13 +38,13 @@
 }
 
 .apbp-control-buttons {
+  color: #eeeeee;
   background-color: #222;
   font-size: 16px;
   height: 30px;
   line-height: 30px;
   display: -ms-flexbox;
   display: flex;
-  color: white;
 }
 .apbp-control-buttons button {
   font-size: 16px;
@@ -52,10 +52,14 @@
   background: transparent;
   height: 100%;
   width: 100%;
+  color: inherit;
 }
 .apbp-control-buttons .apbp-button {
   min-width: 30px;
   width: 30px;
+}
+.apbp-control-buttons .apbp-button.apbp-disabled {
+  color: #6D6D6D;
 }
 .apbp-control-buttons .apbp-control-left {
   height: 100%;

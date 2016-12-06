@@ -94,14 +94,16 @@ apbp.playerIndex = 0;
 
         hideVolumeOnTouchDevices: true,
 
+        loopPlaylist: false,
+
         audioVolume: 'horizontal',
         muteText: mejs.i18n.t('Mute Toggle'),
         allyVolumeControlText: mejs.i18n.t('Use Up/Down Arrow keys to increase or decrease volume.'),
         playText: mejs.i18n.t('Play'),
         pauseText: mejs.i18n.t('Pause'),
-
-
-
+        nextText: "Next Track",
+        prevText: "Previous Track",
+        fullscreenText: "Fullscreen",
 
         // array of keyboard actions such as play pause
         keyActions: [
@@ -376,11 +378,11 @@ apbp.playerIndex = 0;
             }
             var allButtons = $('<div class="apbp-control-buttons" />');
             t.controls.append(allButtons);
-            //allButtons.append('<span class="apbp-button apbp-previous"><button><i class="fa fa-inverse fa-step-backward"></i></button></span>');
+            //allButtons.append('<span class="apbp-button apbp-previous"><button><i class="fa fa-step-backward"></i></button></span>');
             this.buildprevtrack(this, allButtons, this.layers, this.media);
-            //allButtons.append('<span class="apbp-button apbp-playpause apbp-playpause-play"><button><i class="fa fa-inverse fa-play"></i></button></span>');
+            //allButtons.append('<span class="apbp-button apbp-playpause apbp-playpause-play"><button><i class="fa fa-play"></i></button></span>');
             this.buildplaypause(this.player, allButtons, this.layers, this.media);
-            //allButtons.append('<span class="apbp-button apbp-next"><button><i class="fa fa-inverse fa-step-forward"></i></button></span>');
+            //allButtons.append('<span class="apbp-button apbp-next"><button><i class="fa fa-step-forward"></i></button></span>');
             this.buildnexttrack(this, allButtons, this.layers, this.media);
             allButtons.append('<span class="apbp-controls-timestamp"><span class="apbp-timestamp-current">00:00</span> / <span class="apbp-timestamp-total"></span></span>')
             allButtons.append('<span class="apbp-controls-spacer"></span>');
@@ -390,7 +392,7 @@ apbp.playerIndex = 0;
 
             t.buildvolume(t, allButtons, t.layers, t.$media[0]);
 
-            //allButtons.append('<span class="apbp-fullscreen apbp-fullscreen-expand"><button><i class="fa fa-inverse fa-expand"></i></button></span>');
+            //allButtons.append('<span class="apbp-fullscreen apbp-fullscreen-expand"><button><i class="fa fa-expand"></i></button></span>');
             this.buildaudiofullscreen(this, allButtons, this.layers, this.media);
 
             t.genPlaylist(t, allButtons, t.layers, t.$media[0]);
@@ -450,7 +452,7 @@ apbp.playerIndex = 0;
                         '<button type="button" aria-controls="' + t.id +
                         '" title="' + t.options.muteText +
                         '" aria-label="' + t.options.muteText +
-                        '"><i class="fa fa-inverse"></i></button>'+
+                        '"><i class="fa "></i></button>'+
                         '</span>' +
                         '<span class="apbp-horizontal-volume-slider" tabindex="0">' + // outer background
                         '<span class="apbp-offscreen">' + t.options.allyVolumeControlText + '</span>' +
@@ -774,7 +776,7 @@ apbp.playerIndex = 0;
         },
         buildplaylist: function(player, controls, layers, media) {
             var t = this;
-            var playlistToggle = $('<div class="apbp-button apbp-playlist-plugin-button apbp-playlist-button ' + (player.options.playlist ? "apbp-hide-playlist" : "apbp-show-playlist") + '">' + '<button type="button" aria-controls="' + player.id + '" title="' + player.options.playlistText + '"><i class="fa fa-inverse fa-list"></i></button>' + "</div>");
+            var playlistToggle = $('<div class="apbp-button apbp-playlist-plugin-button apbp-playlist-button ' + (player.options.playlist ? "apbp-hide-playlist" : "apbp-show-playlist") + '">' + '<button type="button" aria-controls="' + player.id + '" title="' + player.options.playlistText + '"><i class="fa fa-list"></i></button>' + "</div>");
             playlistToggle.appendTo(controls).click(function() {
                 t.togglePlaylistDisplay(player, layers, media);
             });
@@ -852,68 +854,13 @@ apbp.playerIndex = 0;
                     });
                 }
             }
-            player.videoSliderTracks = tracks.length;
             layers.find("li:first").addClass("current played");
-            if (!player.isVideo) {
-                var firstTrack = layers.find("li:first").first();
-                player.changePoster(firstTrack.data("poster"));
-                player.changeSlides(firstTrack.data("slides"), firstTrack.data("slides-inline"), firstTrack.data("slides-lang"), firstTrack.data("poster"));
-            }
-            var $prevVid = $('<a class="mep-prev">'), $nextVid = $('<a class="mep-next">');
-            player.videoSliderIndex = 0;
-            layers.find(".apbp-playlist").append($prevVid);
-            layers.find(".apbp-playlist").append($nextVid);
-            $("#" + player.id + ".apbp-container.mep-slider").find(".apbp-playlist ul li").css({
-                transform: "translate3d(0, -20px, 0) scale3d(0.75, 0.75, 1)"
-            });
-            $prevVid.click(function() {
-                var moveMe = true;
-                player.videoSliderIndex -= 1;
-                if (player.videoSliderIndex < 0) {
-                    player.videoSliderIndex = 0;
-                    moveMe = false;
-                }
-                if (player.videoSliderIndex === player.videoSliderTracks - 1) {
-                    $nextVid.fadeOut();
-                } else {
-                    $nextVid.fadeIn();
-                }
-                if (player.videoSliderIndex === 0) {
-                    $prevVid.fadeOut();
-                } else {
-                    $prevVid.fadeIn();
-                }
-                if (moveMe === true) {
-                    player.sliderWidth = $("#" + player.id).width();
-                    $("#" + player.id + ".apbp-container.mep-slider").find(".apbp-playlist ul li").css({
-                        transform: "translate3d(-" + Math.ceil(player.sliderWidth * player.videoSliderIndex) + "px, -20px, 0) scale3d(0.75, 0.75, 1)"
-                    });
-                }
-            }).hide();
-            $nextVid.click(function() {
-                var moveMe = true;
-                player.videoSliderIndex += 1;
-                if (player.videoSliderIndex > player.videoSliderTracks - 1) {
-                    player.videoSliderIndex = player.videoSliderTracks - 1;
-                    moveMe = false;
-                }
-                if (player.videoSliderIndex === player.videoSliderTracks - 1) {
-                    $nextVid.fadeOut();
-                } else {
-                    $nextVid.fadeIn();
-                }
-                if (player.videoSliderIndex === 0) {
-                    $prevVid.fadeOut();
-                } else {
-                    $prevVid.fadeIn();
-                }
-                if (moveMe === true) {
-                    player.sliderWidth = $("#" + player.id).width();
-                    $("#" + player.id + ".apbp-container.mep-slider").find(".apbp-playlist ul li").css({
-                        transform: "translate3d(-" + Math.ceil(player.sliderWidth * player.videoSliderIndex) + "px, -20px, 0) scale3d(0.75, 0.75, 1)"
-                    });
-                }
-            });
+            var firstTrack = layers.find("li:first").first();
+            player.changePoster(firstTrack.data("poster"));
+            player.changeSlides(firstTrack.data("slides"), firstTrack.data("slides-inline"), firstTrack.data("slides-lang"), firstTrack.data("poster"));
+
+            player.container.trigger("trackUpdate", [0, tracks.length]);
+
             layers.find(".apbp-playlist > ul li").click(function() {
                 if (!$(this).hasClass("current")) {
                     $(this).addClass("played");
@@ -953,7 +900,7 @@ apbp.playerIndex = 0;
                 play =
                     $('<span class="apbp-button apbp-playpause apbp-playpause-play" >' +
                         '<button type="button" aria-controls="' + t.id + '" title="' + op.playText + '" aria-label="' + op.playText + '">' +
-                        '<i class="fa fa-inverse"></i>' +
+                        '<i class="fa"></i>' +
                         '</button>' +
                         '</span>')
                         .appendTo(controls)
@@ -1006,10 +953,20 @@ apbp.playerIndex = 0;
         },
         buildprevtrack: function(player, controls, layers, media) {
             var t = this;
-            var prevTrack = $('<span class="apbp-button apbp-previous">' + '<button type="button" aria-controls="' + player.id + '" title="' + player.options.prevText + '"><i class="fa fa-inverse fa-step-backward"></i></button>' + "</span>");
+            var prevTrack = $('<span class="apbp-button apbp-previous">' + '<button type="button" aria-controls="' + player.id + '" title="' + player.options.prevText + '"><i class="fa fa-step-backward"></i></button>' + "</span>");
             prevTrack.appendTo(controls).click(function() {
                 $(media).trigger("apbp-playprevtrack");
                 player.playPrevTrack();
+            });
+            player.container.on("trackUpdate", function(e, current, total) {
+                if((current <= 0) && !player.loopPlaylist) {
+                    prevTrack.addClass("apbp-disabled");
+                    prevTrack.find("button").prop("disabled", true);
+                }
+                else {
+                    prevTrack.removeClass("apbp-disabled");
+                    prevTrack.find("button").prop("disabled", false);
+                }
             });
             t.prevTrack = t.controls.find(".apbp-prevtrack-button");
         },
@@ -1019,10 +976,20 @@ apbp.playerIndex = 0;
         },
         buildnexttrack: function(player, controls, layers, media) {
             var t = this;
-            var nextTrack = $('<div class="apbp-button apbp-next">' + '<button type="button" aria-controls="' + player.id + '" title="' + player.options.nextText + '"><i class="fa fa-inverse fa-step-forward"></i></button>' + "</div>");
+            var nextTrack = $('<div class="apbp-button apbp-next">' + '<button type="button" aria-controls="' + player.id + '" title="' + player.options.nextText + '"><i class="fa fa-step-forward"></i></button>' + "</div>");
             nextTrack.appendTo(controls).click(function() {
                 $(media).trigger("apbp-playnexttrack");
                 player.playNextTrack();
+            });
+            player.container.on("trackUpdate", function(e, current, total) {
+                if((current >= total - 1) && !player.loopPlaylist) {
+                    nextTrack.addClass("apbp-disabled");
+                    nextTrack.find("button").prop("disabled", true);
+                }
+                else {
+                    nextTrack.removeClass("apbp-disabled");
+                    nextTrack.find("button").prop("disabled", false);
+                }
             });
             t.nextTrack = t.controls.find(".apbp-nexttrack-button");
         },
@@ -1040,21 +1007,15 @@ apbp.playerIndex = 0;
                 notplayed = tracks.not(".current");
             }
             var atEnd = false;
-            if (t.options.shuffle) {
-                var random = Math.floor(Math.random() * notplayed.length);
-                nxt = notplayed.eq(random);
-            } else {
-                nxt = current.next();
-                if (nxt.length < 1 && t.options.autoRewind) {
-                    nxt = current.siblings().first();
-                    atEnd = true;
-                }
+            nxt = current.next();
+            if (nxt.length < 1 && t.options.loopPlaylist) {
+                nxt = current.siblings().first();
+                atEnd = true;
             }
             t.options.loop = false;
             if (nxt.length == 1) {
                 nxt.addClass("played");
                 t.playTrack(nxt);
-                //t.options.loop = t.options.loopplaylist || t.options.continuous && !atEnd;
             }
         },
         playPrevTrack: function() {
@@ -1066,20 +1027,14 @@ apbp.playerIndex = 0;
                 current.removeClass("played");
                 played = tracks.not(".current");
             }
-            if (t.options.shuffle) {
-                var random = Math.floor(Math.random() * played.length);
-                prev = played.eq(random);
-            } else {
-                prev = current.prev();
-                if (prev.length < 1) {
-                    prev = current.siblings().last();
-                }
+            prev = current.prev();
+            if (prev.length < 1 && t.options.loopPlaylist) {
+                prev = current.siblings().last();
             }
             if (prev.length == 1) {
                 current.removeClass("played");
                 this.playTrack(prev);
             }
-            t.setControlsSize();
         },
         playTrack: function(track) {
             var t = this;
@@ -1093,6 +1048,10 @@ apbp.playerIndex = 0;
             t.changeSlides(track.data("slides"), track.data("slides-inline"), track.data("slides-lang"), track.data("poster"));
             t.media.play();
             track.addClass("current").siblings().removeClass("current");
+
+            var totalTracks = track.parent().children().length,
+                currentTrack = track.index();
+            t.container.trigger("trackUpdate", [currentTrack, totalTracks]);
         },
         apbpReady: function(media, domNode) {
             var t = this,
@@ -1162,7 +1121,7 @@ apbp.playerIndex = 0;
                 };
                 player.globalBind(mejs.MediaFeatures.fullScreenEventName, func);
             }
-            t.fullscreenBtn = $('<div class="apbp-button apbp-fullscreen-expandcontract">' + '<button type="button" aria-controls="' + t.id + '" title="' + t.options.fullscreenText + '" aria-label="' + t.options.fullscreenText + '"><i class="fa fa-inverse"></i></button>' + "</div>");
+            t.fullscreenBtn = $('<div class="apbp-button apbp-fullscreen-expandcontract">' + '<button type="button" aria-controls="' + t.id + '" title="' + t.options.fullscreenText + '" aria-label="' + t.options.fullscreenText + '"><i class="fa"></i></button>' + "</div>");
             t.fullscreenBtn.appendTo(controls);
 
             t.fullscreenBtn.on('click', function(e) {
