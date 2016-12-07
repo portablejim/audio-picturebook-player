@@ -231,7 +231,22 @@ apbp.playerIndex = 0;
         calculatePlayerHeight: function(player) {
             var ratio = this.options.aspectRatio.split(":");
             var ratioMultiplier = ratio[1] / ratio[0];
-            player.height(player.width() * ratioMultiplier);
+            var targetHeight = player.width() * ratioMultiplier;
+            this.controls.removeClass("apbp-vanishing");
+            this.controls.removeClass("apbp-vanishing-visible");
+            this.controlsAreVisible = true;
+            if (this.isFullScreen) {
+                player.height("");
+                if (window.innerHeight - this.controls.height() > targetHeight) {
+                    player.height(window.innerHeight - this.controls.height());
+                } else {
+                    player.height("100%");
+                    this.controls.addClass("apbp-vanishing");
+                    this.resetControlsTimeout(this.controls);
+                }
+            } else {
+                player.height(player.width() * ratioMultiplier);
+            }
         },
         setPlayerHeight: function(player, height) {
             if (!this.options.setDimensions) {
@@ -731,18 +746,22 @@ apbp.playerIndex = 0;
         },
         buildaudiofullscreen: function(player, controls, layers, media) {
             var t = this;
-            if (screenfull.enabled) ;
             if (mejs.MediaFeatures.hasTrueNativeFullScreen) {
                 var func = function(e) {
-                    if (player.isFullScreen) {
-                        if (mejs.MediaFeatures.isFullScreen()) {
-                            player.isNativeFullScreen = true;
-                            player.setControlsSize();
-                        } else {
-                            player.isNativeFullScreen = false;
-                            player.exitFullScreen();
+                    if (screenfull.isFullscreen) {
+                        if (screenfull.enabled) {} else {
+                            player.container.addClass("apbp-fakefullscreen");
                         }
+                        player.container.addClass("apbp-fullscreen");
+                        player.isFullScreen = true;
+                    } else {
+                        if (screenfull.enabled) {} else {
+                            player.container.removeClass("apbp-fakefullscreen");
+                        }
+                        player.container.removeClass("apbp-fullscreen");
+                        player.isFullScreen = false;
                     }
+                    player.calculatePlayerHeight(player.layers);
                 };
                 player.globalBind(mejs.MediaFeatures.fullScreenEventName, func);
             }
@@ -753,20 +772,31 @@ apbp.playerIndex = 0;
                     if (screenfull.enabled) {
                         screenfull.exit();
                     } else {
-                        player.removeClass("apbp-fakefullscreen");
+                        player.container.removeClass("apbp-fakefullscreen");
                     }
-                    player.removeClass("apbp-fullscreen");
+                    player.container.removeClass("apbp-fullscreen");
                     player.isFullScreen = false;
                 } else {
                     if (screenfull.enabled) {
                         screenfull.request(player.container[0]);
                     } else {
-                        player.addClass("apbp-fakefullscreen");
+                        player.container.addClass("apbp-fakefullscreen");
                     }
-                    player.addClass("apbp-fullscreen");
+                    player.container.addClass("apbp-fullscreen");
                     player.isFullScreen = true;
                 }
             });
+        },
+        resetControlsTimeout: function(controls) {
+            if (typeof this.controlsTimeout === "number") {
+                window.clearTimeout(this.controlsTimeout);
+            }
+            controls.addClass("apbp-vanishing-visible");
+            this.controlsTimeout = window.setTimeout(function(elm) {
+                return function() {
+                    elm.removeClass("apbp-vanishing-visible");
+                };
+            }(controls), 5e3);
         }
     };
     (function() {

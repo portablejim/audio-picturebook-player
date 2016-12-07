@@ -23,7 +23,7 @@
   top: 0;
   .apbp-progress-loaded {
     background-color: #ccc;
-    background-color: #33333320;
+    background-color: #33333310;
     height: 100%;
     position: absolute;
     top: 0;
@@ -174,4 +174,31 @@
 .apbp-slide-image:first-child {
   opacity: 0;
   transition: opacity 0s ease-out;
+}
+
+.apbp-fullscreen {
+  width: 100%;
+  height: 100%;
+  .apbp-inner {
+    width: 100%;
+    height: 100%;
+
+    position: relative;
+    top: 0;
+  }
+
+  .apbp-controls {
+    transition: bottom 0.3s linear;
+  }
+
+  .apbp-vanishing {
+    width: 100%;
+    position: absolute;
+    bottom: -30px;
+  }
+
+  .apbp-vanishing.apbp-vanishing-visible {
+    position: absolute;
+    bottom: 0px;
+  }
 }
