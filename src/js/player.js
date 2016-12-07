@@ -367,7 +367,12 @@ apbp.playerIndex = 0;
 
             // set the size, while we wait for the plugins to load below
             //t.setPlayerSize(t.width, t.height);
-
+            t.modcontrollayer(t, t.container.find(".apbp-control-overlay"));
+            var stuffHappened = function  stuffHappened(e) {
+                t.resetControlsTimeout(t.controls);
+            };
+            t.controls.on("mousemove", stuffHappened);
+            t.controls.on("mousedown", stuffHappened);
 
             // Add controls
             if(t.options.features.includes("progress")) {
@@ -1176,6 +1181,40 @@ apbp.playerIndex = 0;
                 }
             });
         },
+        modcontrollayer: function(player, controlLayer) {
+            var t = this;
+            controlLayer.css("opacity", 0);
+
+            var stuffHappened = function  stuffHappened(e) {
+                t.resetControlsTimeout(t.controls);
+                t.resetControlLayerTimeout(controlLayer);
+            };
+
+            controlLayer.on("mousemove", stuffHappened);
+            controlLayer.on("click", function clickedStuff(e) {
+                if (controlLayer.css("opacity") > 0.9) {
+                    if (t.media.paused) {
+                        t.media.play();
+                    }
+                    else {
+                        t.media.pause();
+                    }
+                }
+                t.resetControlsTimeout(t.controls);
+                t.resetControlLayerTimeout(controlLayer);
+            });
+
+        },
+        resetControlLayerTimeout: function(controls) {
+            if (typeof this.controlsTimeout === "number") {
+                window.clearTimeout(this.controlsTimeout);
+            }
+            controls.css("opacity", 1);
+
+            this.controlsTimeout = window.setTimeout(function(elm) { return function() {
+                elm.css("opacity", 0);
+            }}(controls), 2000)
+        },
         resetControlsTimeout: function(controls) {
             if (typeof this.controlsTimeout === "number") {
                 window.clearTimeout(this.controlsTimeout);
@@ -1184,7 +1223,7 @@ apbp.playerIndex = 0;
 
             this.controlsTimeout = window.setTimeout(function(elm) { return function() {
                 elm.removeClass("apbp-vanishing-visible");
-            }}(controls), 5000)
+            }}(controls), 2000)
         }
     };
 

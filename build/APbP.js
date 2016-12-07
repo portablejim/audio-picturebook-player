@@ -202,6 +202,12 @@ apbp.playerIndex = 0;
             addEvent("resize", window, function() {
                 t.calculatePlayerHeight(t.layers);
             }, true);
+            t.modcontrollayer(t, t.container.find(".apbp-control-overlay"));
+            var stuffHappened = function stuffHappened(e) {
+                t.resetControlsTimeout(t.controls);
+            };
+            t.controls.on("mousemove", stuffHappened);
+            t.controls.on("mousedown", stuffHappened);
             if (t.options.features.includes("progress")) {
                 t.controls.append('<div class="apbp-progress">' + '<div class="apbp-progress-loaded" />' + '<div class="apbp-progress-current" />' + "</div>");
             }
@@ -787,6 +793,37 @@ apbp.playerIndex = 0;
                 }
             });
         },
+        modcontrollayer: function(player, controlLayer) {
+            var t = this;
+            controlLayer.css("opacity", 0);
+            var stuffHappened = function stuffHappened(e) {
+                t.resetControlsTimeout(t.controls);
+                t.resetControlLayerTimeout(controlLayer);
+            };
+            controlLayer.on("mousemove", stuffHappened);
+            controlLayer.on("click", function clickedStuff(e) {
+                if (controlLayer.css("opacity") > .9) {
+                    if (t.media.paused) {
+                        t.media.play();
+                    } else {
+                        t.media.pause();
+                    }
+                }
+                t.resetControlsTimeout(t.controls);
+                t.resetControlLayerTimeout(controlLayer);
+            });
+        },
+        resetControlLayerTimeout: function(controls) {
+            if (typeof this.controlsTimeout === "number") {
+                window.clearTimeout(this.controlsTimeout);
+            }
+            controls.css("opacity", 1);
+            this.controlsTimeout = window.setTimeout(function(elm) {
+                return function() {
+                    elm.css("opacity", 0);
+                };
+            }(controls), 2e3);
+        },
         resetControlsTimeout: function(controls) {
             if (typeof this.controlsTimeout === "number") {
                 window.clearTimeout(this.controlsTimeout);
@@ -796,7 +833,7 @@ apbp.playerIndex = 0;
                 return function() {
                     elm.removeClass("apbp-vanishing-visible");
                 };
-            }(controls), 5e3);
+            }(controls), 2e3);
         }
     };
     (function() {
