@@ -40,6 +40,13 @@
   position: absolute;
   top: 0;
 }
+.apbp-progress .apbp-time-float {
+  position: absolute;
+  top: -20px;
+  background-color: #333;
+  color: #eee;
+  padding: 1px;
+}
 
 .apbp-control-buttons {
   color: #eeeeee;

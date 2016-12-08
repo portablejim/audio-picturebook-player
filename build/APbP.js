@@ -59,7 +59,6 @@ apbp.playerIndex = 0;
             action: function(player, media) {
                 player.container.find(".apbp-volume-slider").css("display", "block");
                 if (player.hidableControls) {
-                    player.showControls();
                     player.startControlsTimer();
                 }
                 var newVolume = Math.min(media.volume + .1, 1);
@@ -209,7 +208,7 @@ apbp.playerIndex = 0;
             t.controls.on("mousemove", stuffHappened);
             t.controls.on("mousedown", stuffHappened);
             if (t.options.features.includes("progress")) {
-                t.controls.append('<div class="apbp-progress">' + '<div class="apbp-progress-loaded" />' + '<div class="apbp-progress-current" />' + "</div>");
+                t.controls.append('<div class="apbp-progress">' + '<div class="apbp-progress-loaded" />' + '<div class="apbp-progress-current" />' + '<span class="apbp-time-float">' + '<span class="apbp-time-float-current">00:00</span>' + '<span class="apbp-time-float-corner"></span>' + "</span>" + "</div>");
             }
             var allButtons = $('<div class="apbp-control-buttons" />');
             t.controls.append(allButtons);
@@ -219,6 +218,7 @@ apbp.playerIndex = 0;
             allButtons.append('<span class="apbp-controls-timestamp"><span class="apbp-timestamp-current">00:00</span> / <span class="apbp-timestamp-total"></span></span>');
             allButtons.append('<span class="apbp-controls-spacer"></span>');
             t.buildvolume(t, allButtons, t.layers, t.$media[0]);
+            t.buildprogressbar(this, t.controls, t.media);
             this.buildaudiofullscreen(this, allButtons, this.layers, this.media);
             t.genPlaylist(t, allButtons, t.layers, t.$media[0]);
             t.loaded = t.controls.find(".apbp-progress-loaded");
@@ -790,6 +790,66 @@ apbp.playerIndex = 0;
                     }
                     player.container.addClass("apbp-fullscreen");
                     player.isFullScreen = true;
+                }
+            });
+        },
+        buildprogressbar: function(player, controls, media) {
+            var t = this, total = controls.find(".apbp-progress"), loaded = controls.find(".apbp-progress-loaded"), current = controls.find(".apbp-progress-current"), timefloat = controls.find(".apbp-time-float"), timefloatcurrent = controls.find(".apbp-time-float-current");
+            var handleMouseMove = function(e) {
+                var offset = total.offset(), width = total.width(), percentage = 0, newTime = 0, pos = 0, x;
+                if (e.originalEvent && e.originalEvent.changedTouches) {
+                    x = e.originalEvent.changedTouches[0].pageX;
+                } else if (e.changedTouches) {
+                    x = e.changedTouches[0].pageX;
+                } else {
+                    x = e.pageX;
+                }
+                if (media.duration) {
+                    if (x < offset.left) {
+                        x = offset.left;
+                    } else if (x > width + offset.left) {
+                        x = width + offset.left;
+                    }
+                    pos = x - offset.left;
+                    percentage = pos / width;
+                    newTime = percentage <= .02 ? 0 : percentage * media.duration;
+                    if (mouseIsDown && newTime !== media.currentTime) {
+                        media.setCurrentTime(newTime);
+                    }
+                    if (!mejs.MediaFeatures.hasTouch) {
+                        console.log("Width: ", timefloat.width());
+                        timefloat.css("left", pos - timefloat.width() / 2);
+                        timefloatcurrent.html(mejs.Utility.secondsToTimeCode(newTime, player.options));
+                        timefloat.show();
+                    }
+                }
+            }, mouseIsDown = false, mouseIsOver = false, lastKeyPressTime = 0, startedPaused = false, autoRewindInitial = player.options.autoRewind;
+            total.bind("mousedown touchstart", function(e) {
+                if (e.which === 1 || e.which === 0) {
+                    mouseIsDown = true;
+                    handleMouseMove(e);
+                    t.globalBind("mousemove.dur touchmove.dur", function(e) {
+                        handleMouseMove(e);
+                    });
+                    t.globalBind("mouseup.dur touchend.dur", function(e) {
+                        mouseIsDown = false;
+                        timefloat.hide();
+                        t.globalUnbind(".dur");
+                    });
+                }
+            }).bind("mouseenter", function(e) {
+                mouseIsOver = true;
+                t.globalBind("mousemove.dur", function(e) {
+                    handleMouseMove(e);
+                });
+                if (!mejs.MediaFeatures.hasTouch) {
+                    timefloat.show();
+                }
+            }).bind("mouseleave", function(e) {
+                mouseIsOver = false;
+                if (!mouseIsDown) {
+                    t.globalUnbind(".dur");
+                    timefloat.hide();
                 }
             });
         },

@@ -125,7 +125,6 @@ apbp.playerIndex = 0;
                 action: function(player, media) {
                     player.container.find('.apbp-volume-slider').css('display','block');
                     if (player.hidableControls) {
-                        player.showControls();
                         player.startControlsTimer();
                     }
 
@@ -379,6 +378,10 @@ apbp.playerIndex = 0;
                 t.controls.append('<div class="apbp-progress">' +
                     '<div class="apbp-progress-loaded" />' +
                     '<div class="apbp-progress-current" />' +
+                    '<span class="apbp-time-float">' +
+                    '<span class="apbp-time-float-current">00:00</span>' +
+                    '<span class="apbp-time-float-corner"></span>' +
+                    '</span>' +
                     '</div>');
             }
             var allButtons = $('<div class="apbp-control-buttons" />');
@@ -396,6 +399,7 @@ apbp.playerIndex = 0;
             //t.buildplaylist(t, allButtons, t.layers, t.$media[0]);
 
             t.buildvolume(t, allButtons, t.layers, t.$media[0]);
+            t.buildprogressbar(this, t.controls, t.media);
 
             //allButtons.append('<span class="apbp-fullscreen apbp-fullscreen-expand"><button><i class="fa fa-expand"></i></button></span>');
             this.buildaudiofullscreen(this, allButtons, this.layers, this.media);
@@ -1180,6 +1184,102 @@ apbp.playerIndex = 0;
                     player.isFullScreen = true;
                 }
             });
+        },
+        buildprogressbar: function(player, controls, media){
+            var
+                t = this,
+                total = controls.find('.apbp-progress'),
+                loaded  = controls.find('.apbp-progress-loaded'),
+                current  = controls.find('.apbp-progress-current'),
+                timefloat  = controls.find('.apbp-time-float'),
+                timefloatcurrent  = controls.find('.apbp-time-float-current');
+
+            var handleMouseMove = function (e) {
+
+
+                var offset = total.offset(),
+                    width = total.width(),
+                    percentage = 0,
+                    newTime = 0,
+                    pos = 0,
+                    x;
+
+                // mouse or touch position relative to the object
+                if (e.originalEvent && e.originalEvent.changedTouches) {
+                    x = e.originalEvent.changedTouches[0].pageX;
+                } else if (e.changedTouches) { // for Zepto
+                    x = e.changedTouches[0].pageX;
+                } else {
+                    x = e.pageX;
+                }
+
+                if (media.duration) {
+                    if (x < offset.left) {
+                        x = offset.left;
+                    } else if (x > width + offset.left) {
+                        x = width + offset.left;
+                    }
+
+                    pos = x - offset.left;
+                    percentage = (pos / width);
+                    newTime = (percentage <= 0.02) ? 0 : percentage * media.duration;
+
+                    // seek to where the mouse is
+                    if (mouseIsDown && newTime !== media.currentTime) {
+                        media.setCurrentTime(newTime);
+                    }
+
+                    // position floating time box
+                    if (!mejs.MediaFeatures.hasTouch) {
+                        console.log("Width: ", timefloat.width());
+                        timefloat.css('left', pos - (timefloat.width() / 2));
+                        timefloatcurrent.html( mejs.Utility.secondsToTimeCode(newTime, player.options) );
+                        timefloat.show();
+                    }
+                }
+            },
+            mouseIsDown = false,
+            mouseIsOver = false,
+            lastKeyPressTime = 0,
+            startedPaused = false,
+            autoRewindInitial = player.options.autoRewind;
+
+            total
+                .bind('mousedown touchstart', function (e) {
+                    // only handle left clicks or touch
+                    if (e.which === 1 || e.which === 0) {
+                        mouseIsDown = true;
+                        handleMouseMove(e);
+                        t.globalBind('mousemove.dur touchmove.dur', function(e) {
+                            handleMouseMove(e);
+                        });
+                        t.globalBind('mouseup.dur touchend.dur', function (e) {
+                            mouseIsDown = false;
+                            timefloat.hide();
+                            t.globalUnbind('.dur');
+                        });
+                    }
+                })
+                .bind('mouseenter', function(e) {
+                    mouseIsOver = true;
+                    t.globalBind('mousemove.dur', function(e) {
+                        handleMouseMove(e);
+                    });
+                    if (!mejs.MediaFeatures.hasTouch) {
+                        timefloat.show();
+                    }
+                })
+                .bind('mouseleave',function(e) {
+                    mouseIsOver = false;
+                    if (!mouseIsDown) {
+                        t.globalUnbind('.dur');
+                        timefloat.hide();
+                    }
+                });
+
+
+
+
         },
         modcontrollayer: function(player, controlLayer) {
             var t = this;
