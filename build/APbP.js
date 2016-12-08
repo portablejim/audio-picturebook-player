@@ -825,13 +825,16 @@ apbp.playerIndex = 0;
             }(controls), 2e3);
         },
         resetControlsTimeout: function(controls) {
+            var t = this;
             if (typeof this.controlsTimeout === "number") {
                 window.clearTimeout(this.controlsTimeout);
             }
             controls.addClass("apbp-vanishing-visible");
+            t.controlsAreVisible = true;
             this.controlsTimeout = window.setTimeout(function(elm) {
                 return function() {
                     elm.removeClass("apbp-vanishing-visible");
+                    t.controlsAreVisible = false;
                 };
             }(controls), 2e3);
         }
