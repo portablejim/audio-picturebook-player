@@ -12,7 +12,7 @@ apbp.playerIndex = 0;
         defaultHeight: 270,
         width: -1,
         height: -1,
-        aspectRatio: "16:9",
+        aspectRatio: "12:9",
         defaultSeekBackwardInterval: function(media) {
             return media.duration * .05;
         },
@@ -192,6 +192,9 @@ apbp.playerIndex = 0;
             t.node.player = t;
             t.controls = t.container.find(".apbp-controls");
             t.layers = t.container.find(".apbp-layers");
+            meOptions.pluginWidth = t.width;
+            meOptions.pluginHeight = t.height;
+            t.media = mejs.MediaElement(t.$media[0], meOptions);
             t.calculatePlayerHeight(t.layers);
             addEvent("resize", window, function() {
                 t.calculatePlayerHeight(t.layers);
@@ -200,8 +203,8 @@ apbp.playerIndex = 0;
             var stuffHappened = function stuffHappened(e) {
                 t.resetControlsTimeout(t.controls);
             };
-            t.controls.on("mousemove", stuffHappened);
-            t.controls.on("mousedown", stuffHappened);
+            $(t.controls).on("mousemove", stuffHappened);
+            $(t.controls).on("mousedown", stuffHappened);
             if (t.options.features.includes("progress")) {
                 t.controls.append('<div class="apbp-progress">' + '<div class="apbp-progress-loaded" />' + '<div class="apbp-progress-current" />' + '<span class="apbp-time-float" style="display: none;">' + '<span class="apbp-time-float-current">00:00</span>' + '<span class="apbp-time-float-corner"></span>' + "</span>" + "</div>");
             }
@@ -218,14 +221,11 @@ apbp.playerIndex = 0;
             t.genPlaylist(t, allButtons, t.layers, t.$media[0]);
             t.loaded = t.controls.find(".apbp-progress-loaded");
             t.total = t.controls.find(".apbp-progress-current");
-            meOptions.pluginWidth = t.width;
-            meOptions.pluginHeight = t.height;
-            mejs.MediaElement(t.$media[0], meOptions);
-            t.media.addEventListener("progress", function(e) {
+            $(t.media).on("progress", function(e) {
                 this.player.updateCurrent();
                 this.player.updateTotal();
             }, false);
-            t.media.addEventListener("timeupdate", function(e) {
+            $(t.media).on("timeupdate", function(e) {
                 this.player.updateSlides(t.media, t.layers.find(".apbp-images"), e.currentTime);
             }, false);
         },
@@ -373,7 +373,7 @@ apbp.playerIndex = 0;
             mute.find("button").bind("focus", function() {
                 volumeSlider.show();
             });
-            media.addEventListener("volumechange", function(e) {
+            $(media).on("volumechange", function(e) {
                 if (!mouseIsDown) {
                     if (media.muted) {
                         positionVolumeHandle(0);
@@ -391,7 +391,7 @@ apbp.playerIndex = 0;
             if (media.pluginType === "native") {
                 media.setVolume(player.options.startVolume);
             }
-            t.container.on("controlsresize", function() {
+            $(t.container).on("controlsresize", function() {
                 positionVolumeHandle(media.volume);
             });
         },
@@ -553,21 +553,21 @@ apbp.playerIndex = 0;
                     }
                 }
             });
-            media.addEventListener("ended", function() {
+            $(media).on("ended", function() {
                 player.playNextTrack();
             }, false);
-            media.addEventListener("playing", function() {
+            $(media).on("playing", function() {
                 player.container.removeClass("mep-paused").addClass("mep-playing");
                 if (player.isVideo) {
                     t.togglePlaylistDisplay(player, layers, media, "hide");
                 }
             }, false);
-            media.addEventListener("play", function() {
+            $(media).on("play", function() {
                 if (!player.isVideo) {
                     layers.find(".apbp-poster").show();
                 }
             }, false);
-            media.addEventListener("pause", function() {
+            $(media).on("pause", function() {
                 player.container.removeClass("mep-playing").addClass("mep-paused");
             }, false);
         },
@@ -597,16 +597,16 @@ apbp.playerIndex = 0;
                 }
             }
             togglePlayPause("pse");
-            media.addEventListener("play", function() {
+            $(media).on("play", function() {
                 togglePlayPause("play");
             }, false);
-            media.addEventListener("playing", function() {
+            $(media).on("playing", function() {
                 togglePlayPause("play");
             }, false);
-            media.addEventListener("pause", function() {
+            $(media).on("pause", function() {
                 togglePlayPause("pse");
             }, false);
-            media.addEventListener("paused", function() {
+            $(media).on("paused", function() {
                 togglePlayPause("pse");
             }, false);
         },
@@ -617,7 +617,7 @@ apbp.playerIndex = 0;
                 $(media).trigger("apbp-playprevtrack");
                 player.playPrevTrack();
             });
-            player.container.on("trackUpdate", function(e, current, total) {
+            $(player.container).on("trackUpdate", function(e, current, total) {
                 if (current <= 0 && !player.loopPlaylist) {
                     prevTrack.addClass("apbp-disabled");
                     prevTrack.find("button").prop("disabled", true);
@@ -721,7 +721,7 @@ apbp.playerIndex = 0;
             t.updateCurrent();
             t.updateTotal();
             t.updateSlides(t.media, t.layers.find(".apbp-images"), 0);
-            t.media.addEventListener("loadedmetadata", function(e) {
+            $(t.media).on("loadedmetadata", function(e) {
                 if (t.updateCurrent) {
                     t.updateCurrent();
                 }
@@ -730,7 +730,7 @@ apbp.playerIndex = 0;
                 }
                 this.player.updateSlides(t.media, t.layers.find(".apbp-images"), e.currentTime);
             }, false);
-            t.media.addEventListener("loadeddata", function(e) {
+            $(t.media).on("loadeddata", function(e) {
                 if (t.updateCurrent) {
                     t.updateCurrent();
                 }
@@ -739,7 +739,7 @@ apbp.playerIndex = 0;
                 }
             }, false);
             var duration = null;
-            t.media.addEventListener("timeupdate", function() {
+            $(t.media).on("timeupdate", function() {
                 if (duration !== this.duration) {
                     this.player.updateCurrent();
                 }
@@ -768,7 +768,7 @@ apbp.playerIndex = 0;
             }
             t.fullscreenBtn = $('<div class="apbp-button apbp-fullscreen-expandcontract">' + '<button type="button" aria-controls="' + t.id + '" title="' + t.options.fullscreenText + '" aria-label="' + t.options.fullscreenText + '"><i class="fa"></i></button>' + "</div>");
             t.fullscreenBtn.appendTo(controls);
-            t.fullscreenBtn.on("click", function(e) {
+            var fullscreenClick = function(e) {
                 if (player.isFullScreen) {
                     if (screenfull.enabled) {
                         screenfull.exit();
@@ -786,7 +786,8 @@ apbp.playerIndex = 0;
                     player.container.addClass("apbp-fullscreen");
                     player.isFullScreen = true;
                 }
-            });
+            };
+            t.fullscreenBtn.on("click", fullscreenClick);
         },
         buildprogressbar: function(player, controls, media) {
             var t = this, total = controls.find(".apbp-progress"), loaded = controls.find(".apbp-progress-loaded"), current = controls.find(".apbp-progress-current"), timefloat = controls.find(".apbp-time-float"), timefloatcurrent = controls.find(".apbp-time-float-current");
@@ -855,27 +856,33 @@ apbp.playerIndex = 0;
                 t.resetControlsTimeout(t.controls);
                 t.resetControlLayerTimeout(controlLayer);
             };
-            controlLayer.on("mousemove", stuffHappened);
+            controlLayer.on("mousemove touchstart", stuffHappened);
             controlLayer.on("click", function clickedStuff(e) {
-                if (controlLayer.css("opacity") > .9) {
+                if (t.controlsLayerVisible) {
                     if (t.media.paused) {
                         t.media.play();
                     } else {
                         t.media.pause();
                     }
+                } else {
+                    t.controlsLayerVisible = true;
                 }
                 t.resetControlsTimeout(t.controls);
                 t.resetControlLayerTimeout(controlLayer);
             });
         },
         resetControlLayerTimeout: function(controls) {
-            if (typeof this.controlsTimeout === "number") {
-                window.clearTimeout(this.controlsTimeout);
+            if (typeof this.controlsLayerTimeout === "number") {
+                window.clearTimeout(this.controlsLayerTimeout);
+                delete this.controlsLayerTimeout;
+                this.controlsLayerTimeout = null;
             }
             controls.css("opacity", 1);
-            this.controlsTimeout = window.setTimeout(function(elm) {
+            var t = this;
+            this.controlsLayerTimeout = window.setTimeout(function(elm) {
                 return function() {
                     elm.css("opacity", 0);
+                    t.controlsLayerVisible = false;
                 };
             }(controls), 2e3);
         },
@@ -883,15 +890,16 @@ apbp.playerIndex = 0;
             var t = this;
             if (typeof this.controlsTimeout === "number") {
                 window.clearTimeout(this.controlsTimeout);
+                delete this.controlsTimeout;
+                this.controlsTimeout = null;
             }
             controls.addClass("apbp-vanishing-visible");
             t.controlsAreVisible = true;
-            this.controlsTimeout = window.setTimeout(function(elm) {
-                return function() {
-                    elm.removeClass("apbp-vanishing-visible");
-                    t.controlsAreVisible = false;
-                };
-            }(controls), 2e3);
+            var vanishControls = function vanishControls() {
+                t.controls.removeClass("apbp-vanishing-visible");
+                t.controlsAreVisible = false;
+            };
+            this.controlsTimeout = window.setTimeout(vanishControls, 2e3);
         }
     };
     (function() {
