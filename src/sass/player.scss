@@ -5,6 +5,10 @@
   left: 0;
 }
 
+.apbp-fullscreen .apbp-progress {
+  background-color: transparent;
+}
+
 .apbp-images.apbp-blackout {
   background-color: #000;
 }
@@ -18,12 +22,12 @@
 }
 
 .apbp-progress {
-  height: 4px;
+  height: 6px;
   position: relative;
   top: 0;
   .apbp-progress-loaded {
     background-color: #ccc;
-    background-color: #33333310;
+    background-color: rgba(51, 51, 51, 50);
     height: 100%;
     position: absolute;
     top: 0;
@@ -195,10 +199,19 @@
     width: 100%;
     position: absolute;
     bottom: -30px;
+
+    .apbp-progress {
+      height: 2px;
+      transition: height 0.5s linear;
+    }
   }
 
   .apbp-vanishing.apbp-vanishing-visible {
     position: absolute;
     bottom: 0px;
+
+    .apbp-progress {
+      height: 8px;
+    }
   }
 }
