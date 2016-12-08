@@ -137,7 +137,6 @@ apbp.playerIndex = 0;
                 action: function(player, media) {
                     player.container.find('.apbp-volume-slider').css('display','block');
                     if (player.hidableControls) {
-                        player.showControls();
                         player.startControlsTimer();
                     }
 
@@ -153,7 +152,6 @@ apbp.playerIndex = 0;
                 action: function(player, media) {
                     if (!isNaN(media.duration) && media.duration > 0) {
                         if (player.hidableControls) {
-                            player.showControls();
                             player.startControlsTimer();
                         }
 
@@ -171,7 +169,6 @@ apbp.playerIndex = 0;
                 action: function(player, media) {
                     if (!isNaN(media.duration) && media.duration > 0) {
                         if (player.hidableControls) {
-                            player.showControls();
                             player.startControlsTimer();
                         }
 
@@ -198,7 +195,6 @@ apbp.playerIndex = 0;
                 action: function(player, media) {
                     player.container.find('.apbp-volume-slider').css('display','block');
                     if (player.hidableControls) {
-                        player.showControls();
                         player.startControlsTimer();
                     }
                     if (player.media.muted) {
@@ -312,7 +308,6 @@ apbp.playerIndex = 0;
                     .insertBefore(t.$media)
                     .focus(function ( e ) {
                         if( !t.controlsAreVisible ) {
-                            t.showControls(true);
                             var playButton = t.container.find('.apbp-playpause-button > button');
                             playButton.focus();
                         }
@@ -378,7 +373,7 @@ apbp.playerIndex = 0;
                 t.controls.append('<div class="apbp-progress">' +
                     '<div class="apbp-progress-loaded" />' +
                     '<div class="apbp-progress-current" />' +
-                    '<span class="apbp-time-float">' +
+                    '<span class="apbp-time-float" style="display: none;">' +
                     '<span class="apbp-time-float-current">00:00</span>' +
                     '<span class="apbp-time-float-corner"></span>' +
                     '</span>' +

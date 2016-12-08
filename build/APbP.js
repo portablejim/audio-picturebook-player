@@ -69,7 +69,6 @@ apbp.playerIndex = 0;
             action: function(player, media) {
                 player.container.find(".apbp-volume-slider").css("display", "block");
                 if (player.hidableControls) {
-                    player.showControls();
                     player.startControlsTimer();
                 }
                 var newVolume = Math.max(media.volume - .1, 0);
@@ -80,7 +79,6 @@ apbp.playerIndex = 0;
             action: function(player, media) {
                 if (!isNaN(media.duration) && media.duration > 0) {
                     if (player.hidableControls) {
-                        player.showControls();
                         player.startControlsTimer();
                     }
                     var newTime = Math.max(media.currentTime - player.options.defaultSeekBackwardInterval(media), 0);
@@ -92,7 +90,6 @@ apbp.playerIndex = 0;
             action: function(player, media) {
                 if (!isNaN(media.duration) && media.duration > 0) {
                     if (player.hidableControls) {
-                        player.showControls();
                         player.startControlsTimer();
                     }
                     var newTime = Math.min(media.currentTime + player.options.defaultSeekForwardInterval(media), media.duration);
@@ -115,7 +112,6 @@ apbp.playerIndex = 0;
             action: function(player, media) {
                 player.container.find(".apbp-volume-slider").css("display", "block");
                 if (player.hidableControls) {
-                    player.showControls();
                     player.startControlsTimer();
                 }
                 if (player.media.muted) {
@@ -179,7 +175,6 @@ apbp.playerIndex = 0;
             $('<span class="apbp-offscreen">' + videoPlayerTitle + "</span>").insertBefore(t.$media);
             t.container = $('<div id="' + t.id + '" class="apbp-container ' + (mejs.MediaFeatures.svgAsImg ? "svg" : "no-svg") + '" tabindex="0" role="application" aria-label="' + videoPlayerTitle + '">' + '<div class="apbp-clear"></div>' + '<div class="apbp-inner">' + '<div class="apbp-mediaelement"></div>' + '<div class="apbp-layers">' + '<div class="apbp-poster apbp-layer"></div>' + '<div class="apbp-images apbp-layer"></div>' + '<div class="apbp-control-overlay apbp-layer"></div>' + "</div>" + '<div class="apbp-controls"></div>' + "</div>" + "</div>").addClass(t.$media[0].className).insertBefore(t.$media).focus(function(e) {
                 if (!t.controlsAreVisible) {
-                    t.showControls(true);
                     var playButton = t.container.find(".apbp-playpause-button > button");
                     playButton.focus();
                 }
@@ -208,7 +203,7 @@ apbp.playerIndex = 0;
             t.controls.on("mousemove", stuffHappened);
             t.controls.on("mousedown", stuffHappened);
             if (t.options.features.includes("progress")) {
-                t.controls.append('<div class="apbp-progress">' + '<div class="apbp-progress-loaded" />' + '<div class="apbp-progress-current" />' + '<span class="apbp-time-float">' + '<span class="apbp-time-float-current">00:00</span>' + '<span class="apbp-time-float-corner"></span>' + "</span>" + "</div>");
+                t.controls.append('<div class="apbp-progress">' + '<div class="apbp-progress-loaded" />' + '<div class="apbp-progress-current" />' + '<span class="apbp-time-float" style="display: none;">' + '<span class="apbp-time-float-current">00:00</span>' + '<span class="apbp-time-float-corner"></span>' + "</span>" + "</div>");
             }
             var allButtons = $('<div class="apbp-control-buttons" />');
             t.controls.append(allButtons);
