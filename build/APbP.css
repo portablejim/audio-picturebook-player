@@ -214,4 +214,10 @@
   height: 8px;
 }
 
+.apbp-offscreen {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+}
+
 /*# sourceMappingURL=APbP.css.map */
