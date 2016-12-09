@@ -224,10 +224,10 @@ apbp.playerIndex = 0;
             $(t.media).on("progress", function(e) {
                 this.player.updateCurrent();
                 this.player.updateTotal();
-            }, false);
+            });
             $(t.media).on("timeupdate", function(e) {
                 this.player.updateSlides(t.media, t.layers.find(".apbp-images"), e.currentTime);
-            }, false);
+            });
         },
         calculatePlayerHeight: function(player) {
             var ratio = this.options.aspectRatio.split(":");
@@ -384,7 +384,7 @@ apbp.playerIndex = 0;
                     }
                 }
                 updateVolumeSlider(e);
-            }, false);
+            });
             if (player.options.startVolume === 0) {
                 media.setMuted(true);
             }
@@ -555,13 +555,13 @@ apbp.playerIndex = 0;
             });
             $(media).on("ended", function() {
                 player.playNextTrack();
-            }, false);
+            });
             $(media).on("playing", function() {
                 player.container.removeClass("mep-paused").addClass("mep-playing");
                 if (player.isVideo) {
                     t.togglePlaylistDisplay(player, layers, media, "hide");
                 }
-            }, false);
+            });
             $(media).on("play", function() {
                 if (!player.isVideo) {
                     layers.find(".apbp-poster").show();
@@ -569,7 +569,7 @@ apbp.playerIndex = 0;
             }, false);
             $(media).on("pause", function() {
                 player.container.removeClass("mep-playing").addClass("mep-paused");
-            }, false);
+            });
         },
         buildplaypause: function(player, controls, layers, media) {
             var t = this, op = t.options, play = $('<span class="apbp-button apbp-playpause apbp-playpause-play" >' + '<button type="button" aria-controls="' + t.id + '" title="' + op.playText + '" aria-label="' + op.playText + '">' + '<i class="fa"></i>' + "</button>" + "</span>").appendTo(controls).click(function(e) {
@@ -599,16 +599,16 @@ apbp.playerIndex = 0;
             togglePlayPause("pse");
             $(media).on("play", function() {
                 togglePlayPause("play");
-            }, false);
+            });
             $(media).on("playing", function() {
                 togglePlayPause("play");
-            }, false);
+            });
             $(media).on("pause", function() {
                 togglePlayPause("pse");
-            }, false);
+            });
             $(media).on("paused", function() {
                 togglePlayPause("pse");
-            }, false);
+            });
         },
         buildprevtrack: function(player, controls, layers, media) {
             var t = this;
@@ -729,7 +729,7 @@ apbp.playerIndex = 0;
                     t.updateTotal();
                 }
                 this.player.updateSlides(t.media, t.layers.find(".apbp-images"), e.currentTime);
-            }, false);
+            });
             $(t.media).on("loadeddata", function(e) {
                 if (t.updateCurrent) {
                     t.updateCurrent();
@@ -737,13 +737,13 @@ apbp.playerIndex = 0;
                 if (t.updateTotal) {
                     t.updateTotal();
                 }
-            }, false);
+            });
             var duration = null;
             $(t.media).on("timeupdate", function() {
                 if (duration !== this.duration) {
                     this.player.updateCurrent();
                 }
-            }, false);
+            });
         },
         buildaudiofullscreen: function(player, controls, layers, media) {
             var t = this;
