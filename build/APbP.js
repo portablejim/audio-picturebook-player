@@ -173,7 +173,7 @@ apbp.playerIndex = 0;
             t.$media.removeAttr("controls");
             var videoPlayerTitle = mejs.i18n.t("Audio Player");
             $('<span class="apbp-offscreen">' + videoPlayerTitle + "</span>").insertBefore(t.$media);
-            t.container = $('<div id="' + t.id + '" class="apbp-container ' + (mejs.MediaFeatures.svgAsImg ? "svg" : "no-svg") + '" tabindex="0" role="application" aria-label="' + videoPlayerTitle + '">' + '<div class="apbp-clear"></div>' + '<div class="apbp-inner">' + '<div class="apbp-mediaelement"></div>' + '<div class="apbp-layers">' + '<div class="apbp-poster apbp-layer"></div>' + '<div class="apbp-images apbp-layer"></div>' + '<div class="apbp-control-overlay apbp-layer"></div>' + "</div>" + '<div class="apbp-controls"></div>' + "</div>" + "</div>").addClass(t.$media[0].className).insertBefore(t.$media).focus(function(e) {
+            t.container = $('<div id="' + t.id + '" class="apbp-container ' + (mejs.MediaFeatures.svgAsImg ? "svg" : "no-svg") + " mep-paused" + '" tabindex="0" role="application" aria-label="' + videoPlayerTitle + '">' + '<div class="apbp-clear"></div>' + '<div class="apbp-inner">' + '<div class="apbp-mediaelement"></div>' + '<div class="apbp-layers">' + '<div class="apbp-poster apbp-layer"></div>' + '<div class="apbp-images apbp-layer"></div>' + '<div class="apbp-control-overlay apbp-layer">' + '<div class="apbp-control-overlay-left"><i class="fa fa-step-backward"></i></div>' + '<div class="apbp-control-overlay-center"><div><i class="fa"></i></div></div>' + '<div class="apbp-control-overlay-right"><i class="fa fa-step-forward"></i></div>' + "</div>" + "</div>" + '<div class="apbp-controls"></div>' + "</div>" + "</div>").addClass(t.$media[0].className).insertBefore(t.$media).focus(function(e) {
                 if (!t.controlsAreVisible) {
                     var playButton = t.container.find(".apbp-playpause-button > button");
                     playButton.focus();
@@ -857,7 +857,25 @@ apbp.playerIndex = 0;
                 t.resetControlLayerTimeout(controlLayer);
             };
             controlLayer.on("mousemove touchstart", stuffHappened);
-            controlLayer.on("click", function clickedStuff(e) {
+            controlLayer.find(".apbp-control-overlay-left").on("click", function clickedStuff(e) {
+                if (t.controlsLayerVisible) {
+                    t.playPrevTrack();
+                } else {
+                    t.controlsLayerVisible = true;
+                }
+                t.resetControlsTimeout(t.controls);
+                t.resetControlLayerTimeout(controlLayer);
+            });
+            controlLayer.find(".apbp-control-overlay-right").on("click", function clickedStuff(e) {
+                if (t.controlsLayerVisible) {
+                    t.playNextTrack();
+                } else {
+                    t.controlsLayerVisible = true;
+                }
+                t.resetControlsTimeout(t.controls);
+                t.resetControlLayerTimeout(controlLayer);
+            });
+            controlLayer.find(".apbp-control-overlay-center").on("click", function clickedStuff(e) {
                 if (t.controlsLayerVisible) {
                     if (t.media.paused) {
                         t.media.play();
@@ -879,6 +897,7 @@ apbp.playerIndex = 0;
             }
             controls.css("opacity", 1);
             var t = this;
+            t.controlsLayerVisible = true;
             this.controlsLayerTimeout = window.setTimeout(function(elm) {
                 return function() {
                     elm.css("opacity", 0);
