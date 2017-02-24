@@ -161,11 +161,19 @@
 }
 
 .apbp-fullscreen-expandcontract .fa:before {
-  content: "\f065"
+  content: "\f065";
 }
 
 .apbp-fullscreen .apbp-fullscreen-expandcontract .fa:before {
-  content: "\f066"
+  content: "\f066";
+}
+
+.mep-paused .apbp-control-overlay-center .fa:before {
+  content: "\f04b";
+}
+
+.mep-playing .apbp-control-overlay-center .fa:before {
+  content: "\f04c";
 }
 
 .apbp-poster-image, .apbp-slide-image {
@@ -229,4 +237,72 @@
   position: absolute!important;
   height: 1px;
   width: 1px;
+}
+
+.apbp-control-overlay {
+  transition: opacity 0.2s;
+
+  > div {
+    height: 100%;
+    position: absolute;
+    top: 0;
+  }
+
+  > div:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .fa {
+    font-size: 60px;
+    background-color: rgba(251, 251, 251, 0.7);
+    padding: 10px;
+    border-radius: 20px;
+  }
+
+  .apbp-control-overlay-left {
+    left: 0;
+    width: 15%;
+
+    i {
+      position: absolute;
+      top: 50%;
+      margin-top: -50%;
+      left: 0;
+    }
+  }
+    
+  .apbp-control-overlay-right {
+    right: 0;
+    width: 15%;
+
+    i {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      margin-top: -50%;
+      text-align: right;
+    }
+
+    i:before {
+      content: \f04e;
+    }
+  }
+
+  .apbp-control-overlay-center {
+    width: 70%;
+    left: 15%;
+
+    > div {
+      position: relative;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      align-content: center;
+    }
+
+    i {
+    }
+  }
 }
