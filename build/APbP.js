@@ -856,13 +856,6 @@ apbp.playerIndex = 0;
                 t.resetControlsTimeout(t.controls);
                 t.resetControlLayerTimeout(controlLayer);
             };
-            var stuffHappened2 = function stuffHappened(e) {
-                document.getElementById("debug").innerHTML += "mouseMove";
-            };
-            var touchHappened = function touchHappened(e) {
-                document.getElementById("debug").innerHTML += "touch" + e.target;
-                e.preventDefault();
-            };
             controlLayer.find(".apbp-control-overlay-left").on("mousemove", stuffHappened);
             controlLayer.find(".apbp-control-overlay-right").on("mousemove", stuffHappened);
             controlLayer.find(".apbp-control-overlay-center").on("mousemove", stuffHappened);

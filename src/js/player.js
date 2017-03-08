@@ -1290,21 +1290,9 @@ apbp.playerIndex = 0;
                 t.resetControlLayerTimeout(controlLayer);
             };
 
-            var stuffHappened2 = function  stuffHappened(e) {
-                document.getElementById("debug").innerHTML += "mouseMove";
-            };
-
-            var touchHappened = function  touchHappened(e) {
-                document.getElementById("debug").innerHTML += "touch" + e.target;
-                e.preventDefault();
-            };
-
             controlLayer.find(".apbp-control-overlay-left").on("mousemove", stuffHappened);
             controlLayer.find(".apbp-control-overlay-right").on("mousemove", stuffHappened);
             controlLayer.find(".apbp-control-overlay-center").on("mousemove", stuffHappened);
-            //controlLayer.on("mousemove", stuffHappened);
-            //controlLayer.on("mousemove", stuffHappened2);
-            //controlLayer.on("touchstart", touchHappened);
             controlLayer.find(".apbp-control-overlay-left").on("click touchstart", function clickedStuff(e) {
                 if (t.controlsLayerVisible) {
                     t.playPrevTrack();
