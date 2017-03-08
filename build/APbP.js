@@ -856,8 +856,17 @@ apbp.playerIndex = 0;
                 t.resetControlsTimeout(t.controls);
                 t.resetControlLayerTimeout(controlLayer);
             };
-            controlLayer.on("mousemove touchstart", stuffHappened);
-            controlLayer.find(".apbp-control-overlay-left").on("click", function clickedStuff(e) {
+            var stuffHappened2 = function stuffHappened(e) {
+                document.getElementById("debug").innerHTML += "mouseMove";
+            };
+            var touchHappened = function touchHappened(e) {
+                document.getElementById("debug").innerHTML += "touch" + e.target;
+                e.preventDefault();
+            };
+            controlLayer.find(".apbp-control-overlay-left").on("mousemove", stuffHappened);
+            controlLayer.find(".apbp-control-overlay-right").on("mousemove", stuffHappened);
+            controlLayer.find(".apbp-control-overlay-center").on("mousemove", stuffHappened);
+            controlLayer.find(".apbp-control-overlay-left").on("click touchstart", function clickedStuff(e) {
                 if (t.controlsLayerVisible) {
                     t.playPrevTrack();
                 } else {
@@ -865,8 +874,9 @@ apbp.playerIndex = 0;
                 }
                 t.resetControlsTimeout(t.controls);
                 t.resetControlLayerTimeout(controlLayer);
+                e.preventDefault();
             });
-            controlLayer.find(".apbp-control-overlay-right").on("click", function clickedStuff(e) {
+            controlLayer.find(".apbp-control-overlay-right").on("click touchstart", function clickedStuff(e) {
                 if (t.controlsLayerVisible) {
                     t.playNextTrack();
                 } else {
@@ -874,8 +884,9 @@ apbp.playerIndex = 0;
                 }
                 t.resetControlsTimeout(t.controls);
                 t.resetControlLayerTimeout(controlLayer);
+                e.preventDefault();
             });
-            controlLayer.find(".apbp-control-overlay-center").on("click", function clickedStuff(e) {
+            controlLayer.find(".apbp-control-overlay-center").on("click touchstart", function clickedStuff(e) {
                 if (t.controlsLayerVisible) {
                     if (t.media.paused) {
                         t.media.play();
@@ -887,6 +898,7 @@ apbp.playerIndex = 0;
                 }
                 t.resetControlsTimeout(t.controls);
                 t.resetControlLayerTimeout(controlLayer);
+                e.preventDefault();
             });
         },
         resetControlLayerTimeout: function(controls) {
