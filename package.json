@@ -3,13 +3,24 @@
   "version": "0.2.1",
   "repository": "https://github.com/rocco/mediaelement-playlist-plugin",
   "devDependencies": {
-    "grunt": "~0.4.5",
-    "grunt-autoprefixer": "~0.7.5",
-    "grunt-contrib-copy": "~0.5.0",
-    "grunt-contrib-jshint": "~0.10.0",
-    "grunt-contrib-sass": "~0.8.1",
-    "grunt-contrib-uglify": "~0.4.0",
-    "grunt-contrib-watch": "~0.6.1",
-    "grunt-replace": "^0.7.9"
+    "autoprefixer": "latest",
+    "chokidar": "latest",
+    "chokidar-cli": "latest",
+    "eslint": "latest",
+    "node-sass-chokidar": "latest",
+    "npm-run-all": "latest",
+    "postcss": "latest",
+    "postcss-cli": "latest",
+    "uglify-js": "latest"
+  },
+  "scripts": {
+    "build-task:scss-compile": "node-sass --source-map true src/sass/player.scss build/APbP.css",
+    "build-task:autoprefixer": "postcss --use autoprefixer -r build/*.css",
+    "sass:build": "npm-run-all -p build-task:*",
+    "sass:watch": "chokidar 'src/scss/*.scss' -c 'npm run sass:build'",
+    "js:uglify": "uglifyjs src/js/player.js -m -o build/APbP.js",
+    "js:watch": "chokidar 'src/js/*.js' -c 'npm run js:uglify'",
+    "dev": "npm-run-all -p sass:* js:*",
+    "build": "npm-run-all -p sass:build* js:uglify"
   }
 }
