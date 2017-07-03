@@ -1296,7 +1296,7 @@ apbp.playerIndex = 0;
             controlLayer.find(".apbp-control-overlay-left").on("mousemove", stuffHappened);
             controlLayer.find(".apbp-control-overlay-right").on("mousemove", stuffHappened);
             controlLayer.find(".apbp-control-overlay-center").on("mousemove", stuffHappened);
-            controlLayer.find(".apbp-control-overlay-left").on("click touchstart", function clickedStuff(e) {
+            controlLayer.find(".apbp-control-overlay-left span").on("click touchend", function clickedStuff(e) {
                 if (t.controlsLayerVisible) {
                     t.playPrevTrack();
                 }
@@ -1308,7 +1308,7 @@ apbp.playerIndex = 0;
 
                 e.preventDefault();
             });
-            controlLayer.find(".apbp-control-overlay-right").on("click touchstart", function clickedStuff(e) {
+            controlLayer.find(".apbp-control-overlay-right span").on("click touchend", function clickedStuff(e) {
                 if (t.controlsLayerVisible) {
                     t.playNextTrack();
                 }
@@ -1320,7 +1320,7 @@ apbp.playerIndex = 0;
 
                 e.preventDefault();
             });
-            controlLayer.find(".apbp-control-overlay-center").on("click touchstart", function clickedStuff(e) {
+            controlLayer.find(".apbp-control-overlay-center span").on("click touchend", function clickedStuff(e) {
                 if (t.controlsLayerVisible) {
                     if (t.media.paused) {
                         t.media.play();

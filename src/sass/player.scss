@@ -256,6 +256,8 @@
 span.apbp-overlay-image-button {
   width: 60px;
   height: 60px;
+  border: transparent solid 15px;
+  background: no-repeat center;
 }
 
 .apbp-control-overlay {
@@ -300,5 +302,27 @@ span.apbp-overlay-image-button {
   .apbp-control-overlay-center {
     width: 70%;
     left: 15%;
+  }
+}
+
+@media (max-width: 500px) {
+  span.apbp-overlay-image-button {
+    border: transparent solid 5px;
+  }
+
+  .apbp-control-overlay {
+    .apbp-control-overlay-left {
+      width: 33%;
+    }
+
+    .apbp-control-overlay-right {
+      right: 0;
+      width: 33%;
+    }
+
+    .apbp-control-overlay-center {
+      width: 34%;
+      left: 33%;
+    }
   }
 }
