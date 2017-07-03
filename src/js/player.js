@@ -301,9 +301,9 @@ apbp.playerIndex = 0;
                     '<div class="apbp-poster apbp-layer"></div>'+
                     '<div class="apbp-images apbp-layer"></div>'+
                     '<div class="apbp-control-overlay apbp-layer">'+
-                    '<div class="apbp-control-overlay-left"><i class="fa fa-step-backward"></i></div>'+
-                    '<div class="apbp-control-overlay-center"><div><i class="fa"></i></div></div>'+
-                    '<div class="apbp-control-overlay-right"><i class="fa fa-step-forward"></i></div>'+
+                    '<div class="apbp-control-overlay-left"><span class="apbp-overlay-image-button"></span></div>'+
+                    '<div class="apbp-control-overlay-center"><span class="apbp-overlay-image-button"></span></div>'+
+                    '<div class="apbp-control-overlay-right"><span class="apbp-overlay-image-button"></span></div>'+
                     '</div>'+
                     '</div>'+
                     '<div class="apbp-controls"></div>'+
