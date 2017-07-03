@@ -455,6 +455,19 @@ apbp.playerIndex = 0;
             else {
                 player.height(player.width() * ratioMultiplier);
             }
+
+            if (player.parent().width() < 320) {
+                player.parent().removeClass("apbp-small");
+                player.parent().addClass("apbp-tiny");
+            }
+            else if (player.parent().width() < 500) {
+                player.parent().removeClass("apbp-tiny");
+                player.parent().addClass("apbp-small")
+            }
+            else {
+                player.parent().removeClass("apbp-tiny");
+                player.parent().removeClass("apbp-small");
+            }
         },
 
         setPlayerHeight: function(player, height) {

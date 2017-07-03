@@ -259,6 +259,12 @@ span.apbp-overlay-image-button {
   border: transparent solid 15px;
   background: no-repeat center;
 }
+.apbp-tiny {
+  span.apbp-overlay-image-button {
+    width: 30px;
+    height: 30px;
+  }
+}
 
 .apbp-control-overlay {
   transition: opacity 0.2s;
@@ -305,7 +311,7 @@ span.apbp-overlay-image-button {
   }
 }
 
-@media (max-width: 500px) {
+.apbp-small,.apbp-tiny {
   span.apbp-overlay-image-button {
     border: transparent solid 5px;
   }
@@ -324,5 +330,20 @@ span.apbp-overlay-image-button {
       width: 34%;
       left: 33%;
     }
+  }
+}
+
+.apbp-tiny {
+  .apbp-control-buttons .apbp-horizontal-volume-slider {
+    display: none !important;
+  }
+
+  .apbp-control-buttons .apbp-button {
+    width: 25px;
+    min-width: 25px;
+  }
+
+  .apbp-controls-timestamp {
+    font-size: 12px;
   }
 }
