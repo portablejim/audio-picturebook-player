@@ -270,6 +270,7 @@ apbp.playerIndex = 0;
         hasFocus: false,
 
         controlsAreVisible: true,
+        playpausesvg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><circle style="fill:#fff;fill-opacity:1;stroke:none;" id="bg" cx="256" cy="256" r="240" /><path class="play" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm115.7 272l-176 101c-15.8 8.8-35.7-2.5-35.7-21V152c0-18.4 19.8-29.8 35.7-21l176 107c16.4 9.2 16.4 32.9 0 42z"/><path class="pause" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm-16 328c0 8.8-7.2 16-16 16h-48c-8.8 0-16-7.2-16-16V176c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16v160zm112 0c0 8.8-7.2 16-16 16h-48c-8.8 0-16-7.2-16-16V176c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16v160z"/></svg>',
 
         init: function() {
             var
@@ -301,11 +302,11 @@ apbp.playerIndex = 0;
                     '<div class="apbp-poster apbp-layer"></div>'+
                     '<div class="apbp-images apbp-layer"></div>'+
                     '<div class="apbp-paused-overlay apbp-layer">'+
-                    '<span class="apbp-overlay-image-button"></span>'+
+                    '<span class="apbp-overlay-image-button">' + this.playpausesvg + '</span>'+
                     '</div>'+
                     '<div class="apbp-control-overlay apbp-layer">'+
                     '<div class="apbp-control-overlay-left"><span class="apbp-overlay-image-button"></span></div>'+
-                    '<div class="apbp-control-overlay-center"><span class="apbp-overlay-image-button"></span></div>'+
+                    '<div class="apbp-control-overlay-center"><span class="apbp-overlay-image-button">' + this.playpausesvg + '</span></div>'+
                     '<div class="apbp-control-overlay-right"><span class="apbp-overlay-image-button"></span></div>'+
                     '</div>'+
                     '</div>'+

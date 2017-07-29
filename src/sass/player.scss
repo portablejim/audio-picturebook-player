@@ -167,7 +167,10 @@
   .apbp-playpause-play svg .pause,
   .apbp-fullscreen-expandcontract svg .compress,
   .apbp-fullscreen .apbp-fullscreen-expandcontract .expand,
-  .apbp-unmute svg .sound-waves {
+  .apbp-unmute svg .sound-waves,
+  .mep-paused .apbp-control-overlay-center svg .pause,
+  .mep-playing .apbp-control-overlay-center svg .play,
+  .apbp-paused-overlay svg .pause {
   display: none;
 }
 
