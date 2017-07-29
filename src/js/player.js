@@ -105,6 +105,9 @@ apbp.playerIndex = 0;
         prevText: "Previous Track",
         fullscreenText: "Fullscreen",
 
+        // Don't hide the previous image when showing the next one
+        stacking: false,
+
         // array of keyboard actions such as play pause
         keyActions: [
             {
@@ -747,8 +750,9 @@ apbp.playerIndex = 0;
             this.layers.find(".apbp-images").empty();
             if (slideInline) {
                 var slidesList = [];
+                var slideStarts = [];
 
-                for (var key in slideInline) {
+                for (var key = 0; key < slideInline.length; key++) {
                     var slideArr = slideInline[key];
                     if(slideArr.length == 2) {
                         var seconds = $.trim(mejs.Utility.convertSMPTEtoSeconds(slideArr[0]));
@@ -756,6 +760,12 @@ apbp.playerIndex = 0;
                             continue;
                         }
                         slidesList[slidesList.length] = $('<div class="apbp-slide-image" style="background-image: url(\'' + slideArr[1] + '\');" data-start="' + seconds + '" />');
+                        slideStarts[slideStarts.length] = seconds;
+                    }
+                }
+                if(!this.options.stacking) {
+                    for(var i = 1; i < slideStarts.length; i++) {
+                        slidesList[i-1].attr("data-end", slideStarts[i]);
                     }
                 }
                 this.layers.find(".apbp-images").append(slidesList)
@@ -782,9 +792,11 @@ apbp.playerIndex = 0;
           var allChildren = slides.children();
           allChildren.css("opacity", 0);
           var previousChildren = allChildren.filter(function(i, e) {
-              return ($(e).data("start") <= media.currentTime) && (currentTime > 0);
+              return ($(e).data("start") <= media.currentTime) && (currentTime > 0) && (!$(e).data("end") || $(e).data("end") > media.currentTime);
           });
-          $(previousChildren[previousChildren.length - 1]).css("opacity", 1);
+            previousChildren.css("opacity", 1);
+        
+          //$(previousChildren[previousChildren.length - 1]).css("opacity", 1);
         },
         getLoadedPercent: function(e) {
 
