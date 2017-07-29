@@ -410,7 +410,7 @@ apbp.playerIndex = 0;
             t.buildvolume(t, allButtons, t.layers, t.$media[0]);
             t.buildprogressbar(this, t.controls, t.media);
 
-            //allButtons.append('<span class="apbp-fullscreen apbp-fullscreen-expand"><button><i class="fa fa-expand"></i></button></span>');
+            //allButtons.append('<span class="apbp-fullscreen apbp-fullscreen-expand"><button><span /></button></span>');
             this.buildaudiofullscreen(this, allButtons, this.layers, this.media);
 
             t.genPlaylist(t, allButtons, t.layers, t.$media[0]);
@@ -494,7 +494,7 @@ apbp.playerIndex = 0;
                         '<button type="button" aria-controls="' + t.id +
                         '" title="' + t.options.muteText +
                         '" aria-label="' + t.options.muteText +
-                        '"><i class="fa "></i></button>'+
+                        '"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M256 88.017v335.964c0 21.438-25.943 31.998-40.971 16.971L126.059 352H24c-13.255 0-24-10.745-24-24V184c0-13.255 10.745-24 24-24h102.059l88.971-88.954c15.01-15.01 40.97-4.49 40.97 16.971z"/><path class="sound-waves" d="M438.056 10.141C422.982.92 403.283 5.668 394.061 20.745c-9.221 15.077-4.473 34.774 10.604 43.995C468.967 104.063 512 174.983 512 256c0 73.431-36.077 142.292-96.507 184.206-14.522 10.072-18.129 30.01-8.057 44.532 10.076 14.528 30.016 18.126 44.531 8.057C529.633 438.927 576 350.406 576 256c0-103.244-54.579-194.877-137.944-245.859zM480 256c0-68.547-36.15-129.777-91.957-163.901-15.076-9.22-34.774-4.471-43.994 10.607-9.22 15.078-4.471 34.774 10.607 43.994C393.067 170.188 416 211.048 416 256c0 41.964-20.62 81.319-55.158 105.276-14.521 10.073-18.128 30.01-8.056 44.532 6.216 8.96 16.185 13.765 26.322 13.765a31.862 31.862 0 0 0 18.21-5.709C449.091 377.953 480 318.938 480 256zm-96 0c0-33.717-17.186-64.35-45.972-81.944-15.079-9.214-34.775-4.463-43.992 10.616s-4.464 34.775 10.615 43.992C314.263 234.538 320 244.757 320 256a32.056 32.056 0 0 1-13.802 26.332c-14.524 10.069-18.136 30.006-8.067 44.53 10.07 14.525 30.008 18.136 44.53 8.067C368.546 316.983 384 287.478 384 256z"/></svg></button>'+
                         '</span>' +
                         '<span class="apbp-horizontal-volume-slider" tabindex="0">' + // outer background
                         '<span class="apbp-offscreen">' + t.options.allyVolumeControlText + '</span>' +
@@ -942,7 +942,7 @@ apbp.playerIndex = 0;
                 play =
                     $('<span class="apbp-button apbp-playpause apbp-playpause-play" >' +
                         '<button type="button" aria-controls="' + t.id + '" title="' + op.playText + '" aria-label="' + op.playText + '">' +
-                        '<i class="fa"></i>' +
+                        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path class="play" d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"/><path class="pause" d="M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z"/>' +
                         '</button>' +
                         '</span>')
                         .appendTo(controls)
@@ -993,9 +993,16 @@ apbp.playerIndex = 0;
                 togglePlayPause('pse');
             });
         },
+        nexttracksvg: function(dummy, flipped) {
+            var transform = '';
+             if(flipped) {
+                transform = 'transform="rotate(180,224,256)"';
+             }
+                 return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path ' + transform + ' d="M 41.14804,498.27885 V 13.721154 c 0,-7.5426429 6.171254,-13.71389652 13.713897,-13.71389652 h 54.855583 c 7.54265,0 13.7139,6.17125362 13.7139,13.71389652 V 215.31544 L 346.85366,8.4641606 c 23.54219,-19.5423036 59.9983,-3.1999093 59.9983,28.1134884 V 475.42235 c 0,31.3134 -36.45611,47.65579 -59.9983,28.11349 L 123.43142,297.94167 v 200.33718 c 0,7.54264 -6.17125,13.71389 -13.7139,13.71389 H 54.861937 c -7.542643,0 -13.713897,-6.17125 -13.713897,-13.71389 z"/></svg>';
+             },
         buildprevtrack: function(player, controls, layers, media) {
             var t = this;
-            var prevTrack = $('<span class="apbp-button apbp-previous">' + '<button type="button" aria-controls="' + player.id + '" title="' + player.options.prevText + '"><i class="fa fa-step-backward"></i></button>' + "</span>");
+            var prevTrack = $('<span class="apbp-button apbp-previous">' + '<button type="button" aria-controls="' + player.id + '" title="' + player.options.prevText + '">' + player.nexttracksvg(false) + '</button>' + "</span>");
             prevTrack.appendTo(controls).click(function() {
                 $(media).trigger("apbp-playprevtrack");
                 player.playPrevTrack();
@@ -1018,7 +1025,7 @@ apbp.playerIndex = 0;
         },
         buildnexttrack: function(player, controls, layers, media) {
             var t = this;
-            var nextTrack = $('<div class="apbp-button apbp-next">' + '<button type="button" aria-controls="' + player.id + '" title="' + player.options.nextText + '"><i class="fa fa-step-forward"></i></button>' + "</div>");
+            var nextTrack = $('<div class="apbp-button apbp-next">' + '<button type="button" aria-controls="' + player.id + '" title="' + player.options.nextText + '">' + player.nexttracksvg(true, true) + '</button>' + "</div>");
             nextTrack.appendTo(controls).click(function() {
                 $(media).trigger("apbp-playnexttrack");
                 player.playNextTrack();
@@ -1174,7 +1181,9 @@ apbp.playerIndex = 0;
                 };
                 player.globalBind(mejs.MediaFeatures.fullScreenEventName, func);
             }
-            t.fullscreenBtn = $('<div class="apbp-button apbp-fullscreen-expandcontract">' + '<button type="button" aria-controls="' + t.id + '" title="' + t.options.fullscreenText + '" aria-label="' + t.options.fullscreenText + '"><i class="fa"></i></button>' + "</div>");
+            t.fullscreenBtn = $('<span class="apbp-button apbp-fullscreen-expandcontract">' + '<button type="button" aria-controls="' + t.id + '" title="' + t.options.fullscreenText + '" aria-label="' + t.options.fullscreenText + '">'
+                    + '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 32 448 448"><path class="compress" d="M436 192H312c-13.3 0-24-10.7-24-24V44c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v84h84c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm-276-24V44c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v84H12c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h124c13.3 0 24-10.7 24-24zm0 300V344c0-13.3-10.7-24-24-24H12c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h84v84c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm192 0v-84h84c6.6 0 12-5.4 12-12v-40c0-6.6-5.4-12-12-12H312c-13.3 0-24 10.7-24 24v124c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12z"/><path class="expand" d="M0 180V56c0-13.3 10.7-24 24-24h124c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12H64v84c0 6.6-5.4 12-12 12H12c-6.6 0-12-5.4-12-12zM288 44v40c0 6.6 5.4 12 12 12h84v84c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12V56c0-13.3-10.7-24-24-24H300c-6.6 0-12 5.4-12 12zm148 276h-40c-6.6 0-12 5.4-12 12v84h-84c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h124c13.3 0 24-10.7 24-24V332c0-6.6-5.4-12-12-12zM160 468v-40c0-6.6-5.4-12-12-12H64v-84c0-6.6-5.4-12-12-12H12c-6.6 0-12 5.4-12 12v124c0 13.3 10.7 24 24 24h124c6.6 0 12-5.4 12-12z"/></svg>'
+                    + '</button>' + "</span>");
             t.fullscreenBtn.appendTo(controls);
 
             var fullscreenClick = function(e) {
