@@ -8,8 +8,8 @@
     "chokidar-cli": "latest",
     "eslint": "latest",
     "node-sass-chokidar": "latest",
-    "npm-run-all": "latest",
-    "postcss": "latest",
+    "npm-run-all": "^4.1.1",
+    "postcss": "^6.0.13",
     "postcss-cli": "latest",
     "uglify-js": "latest"
   },
@@ -18,8 +18,8 @@
     "build-task:autoprefixer": "postcss --use autoprefixer -r build/*.css",
     "sass:build": "npm-run-all -p build-task:*",
     "sass:watch": "chokidar 'src/scss/*.scss' -c 'npm run sass:build'",
-    "js:uglify-player": "uglifyjs src/js/player.js -m -o build/APbP.js",
-    "js:uglify-other": "uglifyjs libs/screenfull/screenfull.js libs/shims/getElementsByClassName-1.0.1.js libs/shims/other.js -m -o build/APbP-libs.js",
+    "js:uglify-player": "uglifyjs --ie8 src/js/player.js -m -o build/APbP.js",
+    "js:uglify-other": "uglifyjs --ie8 libs/screenfull/screenfull.js libs/shims/getElementsByClassName-1.0.1.js libs/shims/other.js -m -o build/APbP-libs.js",
     "js:watch": "chokidar 'src/js/*.js' -c 'npm run js:uglify-player js:uglify-other'",
     "dev": "npm-run-all -p sass:* js:*",
     "build": "npm-run-all -p sass:build* js:uglify-player js:uglify-other"
