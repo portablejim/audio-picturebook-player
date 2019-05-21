@@ -262,6 +262,7 @@
 }
 
 span.apbp-overlay-image-button {
+  box-sizing: content-box;
   width: 60px;
   height: 60px;
   border: transparent solid 15px;
@@ -269,6 +270,7 @@ span.apbp-overlay-image-button {
 }
 .apbp-tiny {
   span.apbp-overlay-image-button {
+    box-sizing: content-box;
     width: 30px;
     height: 30px;
   }
