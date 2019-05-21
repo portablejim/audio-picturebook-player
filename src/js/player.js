@@ -424,9 +424,35 @@ apbp.playerIndex = 0;
             // current time
             $(t.media).on('timeupdate', function(e) {
                 this.player.updateSlides(t.media, t.layers.find(".apbp-images"), e.currentTime);
+                
+                // Start next track preloading.
+                if((t.media.duration - t.media.currentTime) < 10 && t.media.readyState == 4 && t.media.nearEnd != true) {
+                    t.media.nearEnd = true;
+                    var targetTrack = t.preload.querySelector('[src="' + e.currentTarget.src + '"]').nextSibling;
+                    while (targetTrack && 1 != targetTrack.nodeType) {
+                        targetTrack = targetTrack.nextSibling;
+                    }
+                    targetTrack.preload = "auto";
+
+                    console.log("Preload next track" + targetTrack.src);
+                }
             });
 
 
+            var mediaContainer = t.media.parentElement;
+            t.preload = document.createElement("div");
+            t.preload.classList = "apbp-preload";
+            mediaContainer.append(t.preload);
+            for(var s in t.media.getElementsByTagName("source")) {
+                var newAudio = document.createElement("audio")
+                if(t.media.children[s].src != undefined) {
+                    newAudio.src = t.media.children[s].src;
+                    newAudio.controls = false;
+                    newAudio.autoplay = false;
+                    newAudio.preload = "none";
+                    t.preload.appendChild(newAudio);
+                }
+            }
         },
 
         calculatePlayerHeight: function(player) {
@@ -841,6 +867,7 @@ apbp.playerIndex = 0;
                     return "";
                 }
             };
+            //TODO: FIX for separate audio elements
             var tracks = [], sourceIsPlayable, foundMatchingType = "";
             $("#" + player.id).find(".apbp-mediaelement source").each(function() {
                 if ($(this).parent()[0] && $(this).parent()[0].canPlayType) {
