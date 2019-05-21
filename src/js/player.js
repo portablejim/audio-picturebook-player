@@ -443,6 +443,10 @@ apbp.playerIndex = 0;
 
                     console.log("Preload next track" + targetTrack.src);
                 }
+                else if(t.media.currentTime < 1 && t.media.nearEnd == true)
+                {
+                    t.media.nearEnd = false;
+                }
             });
 
 
