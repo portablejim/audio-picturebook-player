@@ -15,6 +15,12 @@ apbp.playerIndex = 0;
      * https://github.com/johndyer/mediaelement
      */
 
+    apbp.legacy = {
+        polyfillAppend: function() {
+
+        }
+    };
+
     apbp.apbpDefaults = {
         // url to poster (to fix iOS 3.x)
         poster: '',
@@ -340,7 +346,7 @@ apbp.playerIndex = 0;
                 // sadly, you can't move nodes in iOS, so we have to destroy and recreate it!
                 var $newMedia = t.$media.clone();
 
-                t.container.find('.apbp-mediaelement').append($newMedia);
+                $(t.container.find('.apbp-mediaelement')).append($newMedia);
 
                 t.$media.remove();
                 t.$node = t.$media = $newMedia;
@@ -349,7 +355,7 @@ apbp.playerIndex = 0;
             } else {
 
                 // normal way of moving it into place (doesn't work on iOS)
-                t.container.find('.apbp-mediaelement').append(t.$media);
+                $(t.container.find('.apbp-mediaelement')).append(t.$media);
             }
 
             // needs to be assigned here, after iOS remap
@@ -358,6 +364,8 @@ apbp.playerIndex = 0;
             // find parts
             t.controls = t.container.find('.apbp-controls');
             t.layers = t.container.find('.apbp-layers');
+            console.log('layers');
+            console.log(t.layers);
 
             // determine the size
 
@@ -453,7 +461,7 @@ apbp.playerIndex = 0;
             var mediaContainer = t.media.parentElement;
             t.preload = document.createElement("div");
             t.preload.classList = "apbp-preload";
-            mediaContainer.append(t.preload);
+            $(mediaContainer).append(t.preload);
             for(var s in t.media.getElementsByTagName("source")) {
                 var newAudio = document.createElement("audio")
                 if(t.media.children[s].src != undefined) {
@@ -466,41 +474,48 @@ apbp.playerIndex = 0;
             }
         },
 
-        calculatePlayerHeight: function(player) {
+        calculatePlayerHeight: function(layers) {
             var ratio = this.options.aspectRatio.split(":");
             var ratioMultiplier = ratio[1] / ratio[0];
-            var targetHeight = player.width() * ratioMultiplier;
+            var targetHeight = layers.width() * ratioMultiplier;
 
             this.controls.removeClass("apbp-vanishing");
             this.controls.removeClass("apbp-vanishing-visible");
             this.controlsAreVisible = true;
-            if (this.isFullScreen) {
-                player.height("");
+
+            layers.removeClass('hide-apbp-layers')
+            if(targetHeight == 0)
+            {
+                // No height, audio only.
+                layers.addClass('hide-apbp-layers')
+            }
+            else if (this.isFullScreen) {
+                layers.height("");
                 if ((window.innerHeight - this.controls.height()) > targetHeight) {
-                    player.height(window.innerHeight - this.controls.height());
+                    layers.height(window.innerHeight - this.controls.height());
                 }
                 else {
-                    player.height("100%");
+                    layers.height("100%");
                     this.controls.addClass("apbp-vanishing");
                     this.resetControlsTimeout(this.controls);
 
                 }
             }
             else {
-                player.height(player.width() * ratioMultiplier);
+                layers.height(layers.width() * ratioMultiplier);
             }
 
-            if (player.parent().width() < 320) {
-                player.parent().removeClass("apbp-small");
-                player.parent().addClass("apbp-tiny");
+            if (layers.parent().width() < 320) {
+                layers.parent().removeClass("apbp-small");
+                layers.parent().addClass("apbp-tiny");
             }
-            else if (player.parent().width() < 500) {
-                player.parent().removeClass("apbp-tiny");
-                player.parent().addClass("apbp-small")
+            else if (layers.parent().width() < 500) {
+                layers.parent().removeClass("apbp-tiny");
+                layers.parent().addClass("apbp-small")
             }
             else {
-                player.parent().removeClass("apbp-tiny");
-                player.parent().removeClass("apbp-small");
+                layers.parent().removeClass("apbp-tiny");
+                layers.parent().removeClass("apbp-small");
             }
         },
 
@@ -1229,11 +1244,14 @@ apbp.playerIndex = 0;
                     + '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 32 448 448"><path class="compress" d="M436 192H312c-13.3 0-24-10.7-24-24V44c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v84h84c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm-276-24V44c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v84H12c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h124c13.3 0 24-10.7 24-24zm0 300V344c0-13.3-10.7-24-24-24H12c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h84v84c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm192 0v-84h84c6.6 0 12-5.4 12-12v-40c0-6.6-5.4-12-12-12H312c-13.3 0-24 10.7-24 24v124c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12z"/><path class="expand" d="M0 180V56c0-13.3 10.7-24 24-24h124c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12H64v84c0 6.6-5.4 12-12 12H12c-6.6 0-12-5.4-12-12zM288 44v40c0 6.6 5.4 12 12 12h84v84c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12V56c0-13.3-10.7-24-24-24H300c-6.6 0-12 5.4-12 12zm148 276h-40c-6.6 0-12 5.4-12 12v84h-84c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h124c13.3 0 24-10.7 24-24V332c0-6.6-5.4-12-12-12zM160 468v-40c0-6.6-5.4-12-12-12H64v-84c0-6.6-5.4-12-12-12H12c-6.6 0-12 5.4-12 12v124c0 13.3 10.7 24 24 24h124c6.6 0 12-5.4 12-12z"/></svg>'
                     + '</button>' + "</span>");
             var hasFullscreenFeature = false;
-            for(var i = 0; i < player.feature.length; i++)
+            if(player.feature)
             {
-                if(player.options.features[i] == 'fullscreen')
+                for(var i = 0; i < player.feature.length; i++)
                 {
-                    hasFullscreenFeature = true;
+                    if(player.options.features[i] == 'fullscreen')
+                    {
+                        hasFullscreenFeature = true;
+                    }
                 }
             }
             if(hasFullscreenFeature)
