@@ -16,8 +16,20 @@ apbp.playerIndex = 0;
      */
 
     apbp.legacy = {
-        polyfillAppend: function() {
+        testForFlexbox: function() {
+            var d = document.documentElement.style
+            if (('flexWrap' in d) || ('WebkitFlexWrap' in d) || ('msFlexWrap' in d)){
+                return true;
+            }
+            return false;
 
+        },
+        testForSvg: function() {
+            var svgSupport = !!document.createElementNS && !!document.createElementNS('http://www.w3.org/2000/svg', 'svg').createSVGRect;
+            if ( svgSupport ) {
+                return true;
+            }
+            return false;
         }
     };
 
@@ -225,6 +237,11 @@ apbp.playerIndex = 0;
             return new apbp.audioPicturebookPlayer(node, o);
         }
 
+        if(!apbp.legacy.testForSvg())
+        {
+            return;
+        }
+
         var t = this;
 
         // these will be reset after the MediaElement.success fires
@@ -302,6 +319,7 @@ apbp.playerIndex = 0;
             // build container
             t.container =
                 $('<div id="' + t.id + '" class="apbp-container ' + (mejs.MediaFeatures.svgAsImg ? 'svg' : 'no-svg') +
+                    (apbp.legacy.testForFlexbox() ? ' flex ' : ' noFlex ') + 
                     ' mep-paused'+
                     '" tabindex="0" role="application" aria-label="' + videoPlayerTitle + '">'+
                     '<div class="apbp-clear"></div>'+
@@ -364,8 +382,6 @@ apbp.playerIndex = 0;
             // find parts
             t.controls = t.container.find('.apbp-controls');
             t.layers = t.container.find('.apbp-layers');
-            console.log('layers');
-            console.log(t.layers);
 
             // determine the size
 
@@ -438,7 +454,7 @@ apbp.playerIndex = 0;
 
             // current time
             $(t.media).on('timeupdate', function(e) {
-                this.player.updateSlides(t.media, t.layers.find(".apbp-images"), e.currentTime);
+                t.updateSlides(t.media, t.layers.find(".apbp-images"), e.currentTime);
                 
                 // Start next track preloading.
                 if((t.media.duration - t.media.currentTime) < 10 && t.media.readyState == 4 && t.media.nearEnd != true) {
@@ -462,7 +478,7 @@ apbp.playerIndex = 0;
             t.preload = document.createElement("div");
             t.preload.classList = "apbp-preload";
             $(mediaContainer).append(t.preload);
-            for(var s in t.media.getElementsByTagName("source")) {
+            $(t.media).find("source").each(function(s, el) {
                 var newAudio = document.createElement("audio")
                 if(t.media.children[s].src != undefined) {
                     newAudio.src = t.media.children[s].src;
@@ -471,7 +487,7 @@ apbp.playerIndex = 0;
                     newAudio.preload = "none";
                     t.preload.appendChild(newAudio);
                 }
-            }
+            });
         },
 
         calculatePlayerHeight: function(layers) {
@@ -1191,7 +1207,7 @@ apbp.playerIndex = 0;
                 if (t.updateTotal) {
                     t.updateTotal();
                 }
-                this.player.updateSlides(t.media, t.layers.find(".apbp-images"), e.currentTime);
+                t.updateSlides(t.media, t.layers.find(".apbp-images"), e.currentTime);
             });
             $(t.media).on('loadeddata', function(e) {
                 if (t.updateCurrent) {

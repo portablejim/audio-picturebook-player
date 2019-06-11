@@ -355,3 +355,30 @@ span.apbp-overlay-image-button {
     font-size: 12px;
   }
 }
+
+// Dealing with things without flexbox.
+.noFlex {
+  .apbp-control-overlay,
+  .apbp-paused-overlay {
+    display: none;
+  }
+
+  .apbp-controls {
+    //display: table;
+  }
+
+  .apbp-progress, .apbp-control-buttons {
+    //display: table-row;
+  }
+
+  .apbp-control-buttons > div,
+  .apbp-control-buttons > span {
+    display: inline-block;
+  }
+
+  // Hide additional features that probably won't work.
+  .apbp-control-buttons .apbp-volume-button,
+  .apbp-control-buttons > span.apbp-horizontal-volume-slider {
+    display: none;
+  }
+}
