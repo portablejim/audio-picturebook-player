@@ -382,3 +382,11 @@ span.apbp-overlay-image-button {
     display: none;
   }
 }
+
+// Dealing with displays without fullscreen
+.apbp-fakefullscreen
+{
+  position: absolute;
+  top: 0;
+  left: 0;
+}

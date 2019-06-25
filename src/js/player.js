@@ -1233,6 +1233,21 @@ apbp.playerIndex = 0;
             if (mejs.MediaFeatures.hasTrueNativeFullScreen) {
                 var func = function(e) {
                     if(screenfull.isFullscreen) {
+                        player.container.addClass("apbp-fullscreen");
+                        player.isFullScreen = true;
+                    }
+                    else {
+                        player.container.removeClass("apbp-fullscreen");
+                        player.isFullScreen = false;
+                    }
+                    player.calculatePlayerHeight(player.layers)
+                };
+                player.globalBind(mejs.MediaFeatures.fullScreenEventName, func);
+                $(window.document).on('fullscreenchange', func);
+            }
+            else {
+                var func = function(e) {
+                    if(screenfull.isFullscreen) {
                         if(screenfull.enabled) {
                             //screenfull.request(player.container[0]);
                         }
@@ -1299,6 +1314,7 @@ apbp.playerIndex = 0;
                     player.container.addClass("apbp-fullscreen");
                     player.isFullScreen = true;
                 }
+                player.calculatePlayerHeight(player.layers);
             };
             t.fullscreenBtn.on('click', fullscreenClick);
         },
