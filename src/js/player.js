@@ -126,6 +126,9 @@ apbp.playerIndex = 0;
         // Don't hide the previous image when showing the next one
         stacking: false,
 
+        // Do behaviours assuming fastclick is present.
+        handleFastclick: false,
+
         // array of keyboard actions such as play pause
         keyActions: [
             {
@@ -296,7 +299,7 @@ apbp.playerIndex = 0;
         hasFocus: false,
 
         controlsAreVisible: true,
-        playpausesvg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><circle style="fill:#fff;fill-opacity:1;stroke:none;" id="bg" cx="256" cy="256" r="240" /><path class="play" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm115.7 272l-176 101c-15.8 8.8-35.7-2.5-35.7-21V152c0-18.4 19.8-29.8 35.7-21l176 107c16.4 9.2 16.4 32.9 0 42z"/><path class="pause" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm-16 328c0 8.8-7.2 16-16 16h-48c-8.8 0-16-7.2-16-16V176c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16v160zm112 0c0 8.8-7.2 16-16 16h-48c-8.8 0-16-7.2-16-16V176c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16v160z"/></svg>',
+        playpausesvg: '<svg xmlns="http://www.w3.org/2000/svg" class="needsclick" viewBox="0 0 512 512"><circle style="fill:#fff;fill-opacity:1;stroke:none;" id="bg" class="needsclick" cx="256" cy="256" r="240" /><path class="play needsclick" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm115.7 272l-176 101c-15.8 8.8-35.7-2.5-35.7-21V152c0-18.4 19.8-29.8 35.7-21l176 107c16.4 9.2 16.4 32.9 0 42z"/><path class="pause needsclick" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm-16 328c0 8.8-7.2 16-16 16h-48c-8.8 0-16-7.2-16-16V176c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16v160zm112 0c0 8.8-7.2 16-16 16h-48c-8.8 0-16-7.2-16-16V176c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16v160z"/></svg>',
 
         init: function() {
             var
@@ -1423,10 +1426,18 @@ apbp.playerIndex = 0;
                 t.resetControlLayerTimeout(controlLayer);
             };
 
-            controlLayer.find(".apbp-control-overlay-left").on("mousemove", stuffHappened);
-            controlLayer.find(".apbp-control-overlay-right").on("mousemove", stuffHappened);
-            controlLayer.find(".apbp-control-overlay-center").on("mousemove", stuffHappened);
-            controlLayer.find(".apbp-control-overlay-left span").on("click touchend", function clickedStuff(e) {
+            var overlayEvents = "mousemove";
+            var buttonEvents = "click touchend";
+            if(t.options.handleFastclick)
+            {
+                overlayEvents = "mousemove click";
+                buttonEvents = "click";
+            }
+
+            controlLayer.find(".apbp-control-overlay-left").on(overlayEvents, stuffHappened);
+            controlLayer.find(".apbp-control-overlay-right").on(overlayEvents, stuffHappened);
+            controlLayer.find(".apbp-control-overlay-center").on(overlayEvents, stuffHappened);
+            controlLayer.find(".apbp-control-overlay-left span").on(buttonEvents, function clickedStuff(e) {
                 if (t.controlsLayerVisible) {
                     t.playPrevTrack();
                 }
@@ -1438,7 +1449,7 @@ apbp.playerIndex = 0;
 
                 e.preventDefault();
             });
-            controlLayer.find(".apbp-control-overlay-right span").on("click touchend", function clickedStuff(e) {
+            controlLayer.find(".apbp-control-overlay-right span").on(buttonEvents, function clickedStuff(e) {
                 if (t.controlsLayerVisible) {
                     t.playNextTrack();
                 }
@@ -1450,7 +1461,7 @@ apbp.playerIndex = 0;
 
                 e.preventDefault();
             });
-            controlLayer.find(".apbp-control-overlay-center span").on("click touchend", function clickedStuff(e) {
+            controlLayer.find(".apbp-control-overlay-center span").on(buttonEvents, function clickedStuff(e) {
                 if (t.controlsLayerVisible) {
                     if (t.media.paused) {
                         t.media.play();
