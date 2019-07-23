@@ -460,7 +460,7 @@ apbp.playerIndex = 0;
                 t.updateSlides(t.media, t.layers.find(".apbp-images"), e.currentTime);
                 
                 // Start next track preloading.
-                if((t.media.duration - t.media.currentTime) < 10 && t.media.readyState == 4 && t.media.nearEnd != true) {
+                if((t.media.duration - t.media.currentTime) < 20 && t.media.readyState == 4 && t.media.nearEnd != true) {
                     t.media.nearEnd = true;
                     var targetTrack = t.preload.querySelector('[src="' + e.currentTarget.src + '"]').nextSibling;
                     while (targetTrack && 1 != targetTrack.nodeType) {
