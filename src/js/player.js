@@ -362,7 +362,8 @@ apbp.playerIndex = 0;
 
 
             // move the <video/video> tag into the right spot
-            if (mf.isiOS) {
+            //if (mf.isiOS) {
+            if (true) {
 
                 // sadly, you can't move nodes in iOS, so we have to destroy and recreate it!
                 var $newMedia = t.$media.clone();
