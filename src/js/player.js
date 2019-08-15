@@ -460,6 +460,7 @@ apbp.playerIndex = 0;
             $(t.media).on('timeupdate', function(e) {
                 t.updateSlides(t.media, t.layers.find(".apbp-images"), e.currentTime);
                 
+                /*
                 // Start next track preloading.
                 if((t.media.duration - t.media.currentTime) < 20 && t.media.readyState == 4 && t.media.nearEnd != true) {
                     t.media.nearEnd = true;
@@ -467,7 +468,6 @@ apbp.playerIndex = 0;
                     while (targetTrack && 1 != targetTrack.nodeType) {
                         targetTrack = targetTrack.nextSibling;
                     }
-                    targetTrack.preload = "auto";
 
                     console.log("Preload next track" + targetTrack.src);
                 }
@@ -475,6 +475,7 @@ apbp.playerIndex = 0;
                 {
                     t.media.nearEnd = false;
                 }
+                */
             });
 
 
@@ -488,7 +489,6 @@ apbp.playerIndex = 0;
                     newAudio.src = t.media.children[s].src;
                     newAudio.controls = false;
                     newAudio.autoplay = false;
-                    newAudio.preload = "none";
                     t.preload.appendChild(newAudio);
                 }
             });
@@ -1166,7 +1166,7 @@ apbp.playerIndex = 0;
         },
         playTrack: function(track) {
             var t = this;
-            try { t.media.pause(); } catch(e){}
+            try { t.media.pause(); } catch(e){ console.log(e); }
             t.media.setSrc(track.data("url"));
             if (!t.media.isLoaded) {
                 t.media.load()
