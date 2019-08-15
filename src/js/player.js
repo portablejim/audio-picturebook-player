@@ -479,6 +479,7 @@ apbp.playerIndex = 0;
             });
 
 
+            /*
             var mediaContainer = t.media.parentElement;
             t.preload = document.createElement("div");
             t.preload.classList = "apbp-preload";
@@ -492,6 +493,7 @@ apbp.playerIndex = 0;
                     t.preload.appendChild(newAudio);
                 }
             });
+            */
         },
 
         calculatePlayerHeight: function(layers) {
