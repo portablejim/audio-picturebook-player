@@ -49,6 +49,9 @@ apbp.playerIndex = 0;
 
         aspectRatio: "12:9",
 
+        // Aspect ratio to use when in fullscreen (if null, use normal aspect ratio)
+        aspectRatioFullscreen: null,
+
         // default amount to move back when back key is pressed
         defaultSeekBackwardInterval: function(media) {
             return (media.duration * 0.05);
@@ -507,6 +510,12 @@ apbp.playerIndex = 0;
                 layers.addClass('hide-apbp-layers')
             }
             else if (this.isFullScreen) {
+                if(this.options.aspectRatioFullscreen)
+                {
+                    ratio = this.options.aspectRatioFullscreen.split(":");
+                    ratioMultiplier = ratio[1] / ratio[0];
+                    targetHeight = layers.width() * ratioMultiplier;
+                }
                 layers.height("");
                 if ((window.innerHeight - this.controls.height()) > targetHeight) {
                     layers.height(window.innerHeight - this.controls.height());
