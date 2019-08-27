@@ -488,7 +488,7 @@ apbp.playerIndex = 0;
                 if(t.media.children[s].src != undefined) {
                     newAudio.src = t.media.children[s].src;
                     newAudio.controls = false;
-                    newAudio.autoplay = 'metadata';
+                    newAudio.preload = 'metadata';
                     t.preload.appendChild(newAudio);
                 }
             });
