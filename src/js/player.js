@@ -460,7 +460,6 @@ apbp.playerIndex = 0;
             $(t.media).on('timeupdate', function(e) {
                 t.updateSlides(t.media, t.layers.find(".apbp-images"), e.currentTime);
                 
-                /*
                 // Start next track preloading.
                 if((t.media.duration - t.media.currentTime) < 20 && t.media.readyState == 4 && t.media.nearEnd != true) {
                     t.media.nearEnd = true;
@@ -475,11 +474,8 @@ apbp.playerIndex = 0;
                 {
                     t.media.nearEnd = false;
                 }
-                */
             });
 
-
-            /*
             var mediaContainer = t.media.parentElement;
             t.preload = document.createElement("div");
             t.preload.classList = "apbp-preload";
@@ -489,11 +485,10 @@ apbp.playerIndex = 0;
                 if(t.media.children[s].src != undefined) {
                     newAudio.src = t.media.children[s].src;
                     newAudio.controls = false;
-                    newAudio.autoplay = false;
+                    newAudio.autoplay = 'metadata';
                     t.preload.appendChild(newAudio);
                 }
             });
-            */
         },
 
         calculatePlayerHeight: function(layers) {
