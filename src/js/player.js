@@ -1013,6 +1013,10 @@ apbp.playerIndex = 0;
                         player.playNextTrack();
                     }, 150)
                 }
+                else
+                {
+                    ev.target.finishedDebounce = false;
+                }
             });
             $(media).on("playing", function() {
                 player.container.removeClass("mep-paused").addClass("mep-playing");
