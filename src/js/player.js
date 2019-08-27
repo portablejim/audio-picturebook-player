@@ -1000,8 +1000,19 @@ apbp.playerIndex = 0;
                     }
                 }
             });
-            $(media).on("ended", function() {
+            $(media).on("ended", function(ev) {
+                clearTimeout(ev.target.finishedBackup)
                 player.playNextTrack();
+            });
+            $(media).on("timeupdate", function(ev) {
+                var tLeft = ev.target.duration - ev.target.currentTime;
+                if((tLeft <= 0.1 || tLeft == NaN) && !ev.target.finishedDebounce)
+                {
+                    ev.target.finishedDebounce = true
+                    ev.target.finishedBackup = setTimeout(function() {
+                        player.playNextTrack();
+                    }, 150)
+                }
             });
             $(media).on("playing", function() {
                 player.container.removeClass("mep-paused").addClass("mep-playing");
