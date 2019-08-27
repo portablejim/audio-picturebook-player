@@ -1012,7 +1012,7 @@ apbp.playerIndex = 0;
                     ev.target.finishedBackup = setTimeout(function() {
                         player.playNextTrack();
                         ev.target.finishedDebounce = false;
-                    }, 290)
+                    }, 500)
                 }
             });
             $(media).on("playing", function() {
