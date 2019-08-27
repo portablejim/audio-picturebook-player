@@ -1011,11 +1011,8 @@ apbp.playerIndex = 0;
                     ev.target.finishedDebounce = true
                     ev.target.finishedBackup = setTimeout(function() {
                         player.playNextTrack();
-                    }, 150)
-                }
-                else
-                {
-                    ev.target.finishedDebounce = false;
+                        ev.target.finishedDebounce = false;
+                    }, 290)
                 }
             });
             $(media).on("playing", function() {
