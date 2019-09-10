@@ -386,7 +386,8 @@ span.apbp-overlay-image-button {
 // Dealing with displays without fullscreen
 .apbp-fakefullscreen
 {
-  position: absolute;
+  position: fixed;
+  z-index: 200;
   top: 0;
   left: 0;
 }
