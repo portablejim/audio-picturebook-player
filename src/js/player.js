@@ -1457,8 +1457,13 @@ apbp.playerIndex = 0;
             controlLayer.find(".apbp-control-overlay-right").on(overlayEvents, stuffHappened);
             controlLayer.find(".apbp-control-overlay-center").on(overlayEvents, stuffHappened);
             controlLayer.find(".apbp-control-overlay-left span").on(buttonEvents, function clickedStuff(e) {
+                var allTracks = t.layers.find(".apbp-playlist > ul > li");
+                var thisTrack = allTracks.filter('.current');
+                var trackNum = thisTrack.index();
                 if (t.controlsLayerVisible) {
-                    t.playPrevTrack();
+                    if((trackNum > 0) && !player.loopPlaylist) {
+                        t.playPrevTrack();
+                    }
                 }
                 else {
                     t.controlsLayerVisible = true
@@ -1469,8 +1474,14 @@ apbp.playerIndex = 0;
                 e.preventDefault();
             });
             controlLayer.find(".apbp-control-overlay-right span").on(buttonEvents, function clickedStuff(e) {
+                var allTracks = t.layers.find(".apbp-playlist > ul > li");
+                var thisTrack = allTracks.filter('.current');
+                var numTracks = allTracks.length;
+                var trackNum = thisTrack.index();
                 if (t.controlsLayerVisible) {
-                    t.playNextTrack();
+                    if((trackNum < numTracks - 1) && !player.loopPlaylist) {
+                        t.playNextTrack();
+                    }
                 }
                 else {
                     t.controlsLayerVisible = true
@@ -1498,6 +1509,20 @@ apbp.playerIndex = 0;
                 e.preventDefault();
             });
 
+            $(player.container).on("trackUpdate", function(e, current, total) {
+                if((current <= 0) && !player.loopPlaylist) {
+                    controlLayer.find(".apbp-control-overlay-left").addClass("apbp-disabled");
+                }
+                else {
+                    controlLayer.find(".apbp-control-overlay-left").removeClass("apbp-disabled");
+                }
+                if((current >= total - 1) && !player.loopPlaylist) {
+                    controlLayer.find(".apbp-control-overlay-right").addClass("apbp-disabled");
+                }
+                else {
+                    controlLayer.find(".apbp-control-overlay-right").removeClass("apbp-disabled");
+                }
+            });
         },
         resetControlLayerTimeout: function(controls) {
             if (typeof this.controlsLayerTimeout === "number") {
