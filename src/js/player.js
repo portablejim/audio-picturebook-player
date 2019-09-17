@@ -471,7 +471,10 @@ apbp.playerIndex = 0;
                         targetTrack = targetTrack.nextSibling;
                     }
 
-                    console.log("Preload next track" + targetTrack.src);
+                    if(targetTrack)
+                    {
+                        console.log("Preload next track" + targetTrack.src);
+                    }
                 }
                 else if(t.media.currentTime < 1 && t.media.nearEnd == true)
                 {
