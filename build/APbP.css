@@ -136,6 +136,7 @@
 
 .apbp-playpause-pause svg .play,
 .apbp-playpause-play svg .pause,
+.apbp-fullscreen-expandcontract .compress,
 .apbp-fullscreen-expandcontract svg .compress,
 .apbp-fullscreen .apbp-fullscreen-expandcontract .expand,
 .apbp-unmute svg .sound-waves,
@@ -144,7 +145,8 @@
 .apbp-paused-overlay svg .pause {
   display: none; }
 
-.apbp-fullscreen .apbp-fullscreen-expandcontract .compress {
+.apbp-fullscreen .apbp-fullscreen-expandcontract > .compress,
+.apbp-fullscreen .apbp-fullscreen-expandcontract svg .compress {
   display: inline; }
 
 .apbp-button svg path {
